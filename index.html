@@ -525,7 +525,6 @@
       font-size: 14px;
     }
 
-    /* ===== ALERTS IN TIMELINE ===== */
     .timeline-item.alert-item {
       background: var(--attention-bg);
       border-radius: var(--radius-sm);
@@ -588,7 +587,6 @@
 
     .error-btn:active { opacity: 0.8; }
 
-    /* ===== UTILITY ===== */
     .hidden { display: none !important; }
 
     @media (prefers-reduced-motion: reduce) {
@@ -752,7 +750,6 @@
         if (window.Telegram && Telegram.WebApp) {
           Telegram.WebApp.ready();
           Telegram.WebApp.expand();
-          // Adapt header bar color to Telegram theme if available
           if (Telegram.WebApp.themeParams && Telegram.WebApp.themeParams.bg_color) {
             Telegram.WebApp.setHeaderColor(Telegram.WebApp.themeParams.bg_color);
           }
@@ -811,10 +808,8 @@
       }
     }
 
-    // ===== UI REFS =====
     const $ = (id) => document.getElementById(id);
 
-    // ===== UPDATE DATE DISPLAY =====
     function updateDateDisplay() {
       const iso = formatDateISO(currentDate);
       $('headerDate').textContent = iso;
@@ -833,11 +828,9 @@
         $('timelineTitle').textContent = 'Timeline';
       }
 
-      // Disable next if today
       $('nextDay').disabled = isToday(currentDate);
     }
 
-    // ===== STATUS MAP =====
     const STATUS_MAP = {
       calm: { emoji: '🟢', label: 'All is well today', sub: 'Everything looks good' },
       slight_concern: { emoji: '🟡', label: 'Minor things to note', sub: 'Some items need attention' },
@@ -845,13 +838,11 @@
       no_data: { emoji: '⚪', label: 'No data available yet', sub: 'Waiting for sensor updates' }
     };
 
-    // ===== RENDER =====
     function renderData(data) {
       currentData = data;
       const score = data.day_score || 'no_data';
       const info = STATUS_MAP[score] || STATUS_MAP.no_data;
 
-      // Status banner
       const banner = $('statusBanner');
       banner.className = `status-banner fade-in ${score}`;
       banner.innerHTML = `
@@ -862,26 +853,16 @@
         </div>
       `;
 
-      // Status helpers
       const st = data.status || {};
       const summary = data.summary_text || {};
       const stats = data.stats || {};
       const alerts = data.alerts || [];
 
-      // Does a section have alerts?
-      const hasAlertForSection = (section) => {
-        // Check based on alert types or overall
-        if (section === 'safety' && alerts.length > 0) return true;
-        return false;
-      };
-
-      // MEDS CARD
       const medsCard = $('medsCard');
       medsCard.className = `card fade-in fade-in-delay-1${st.meds === 'ALERT' ? ' has-alert' : ''}`;
       renderBadge($('medsBadge'), st.meds || 'OK');
       $('medsSummary').textContent = summary.meds || 'No medication data available.';
 
-      // Meds indicators
       const medsInd = $('medsIndicators');
       const morningStatus = stats.meds_morning || 'pending';
       const eveningStatus = stats.meds_evening || 'pending';
@@ -890,7 +871,6 @@
         ${renderMedSlot('Evening', eveningStatus)}
       `;
 
-      // ACTIVITY CARD
       const actCard = $('activityCard');
       actCard.className = `card fade-in fade-in-delay-2${st.activity === 'ALERT' ? ' has-alert' : ''}`;
       renderBadge($('activityBadge'), st.activity || 'NORMAL');
@@ -903,7 +883,6 @@
         ${stats.night_motion != null ? renderStat('moon', 'Night', stats.night_motion) : ''}
       `;
 
-      // SAFETY CARD
       const safeCard = $('safetyCard');
       safeCard.className = `card fade-in fade-in-delay-3${(st.safety === 'ALERT' || alerts.length > 0) ? ' has-alert' : ''}`;
       renderBadge($('safetyBadge'), st.safety || 'OK');
@@ -916,10 +895,8 @@
         ${alerts.length > 0 ? renderStat('alert', 'Alerts', alerts.length) : ''}
       `;
 
-      // TIMELINE
       renderTimeline(data.timeline || [], alerts);
 
-      // Show data view
       $('skeleton').classList.add('hidden');
       $('errorState').classList.add('hidden');
       $('dataView').classList.remove('hidden');
@@ -969,12 +946,10 @@
       return icons[type] || '';
     }
 
-    // ===== TIMELINE =====
     function renderTimeline(events, alerts) {
       const list = $('timelineList');
       const toggle = $('timelineToggle');
 
-      // Combine events and alerts
       let allItems = [];
 
       if (events && events.length) {
@@ -995,7 +970,6 @@
         }));
       }
 
-      // Sort by time
       allItems.sort((a, b) => {
         const ta = a.time ? new Date(a.time).getTime() : 0;
         const tb = b.time ? new Date(b.time).getTime() : 0;
@@ -1009,8 +983,6 @@
         return;
       }
 
-      // Determine which items to show
-      const showCount = timelineExpanded ? allItems.length : Math.min(3, allItems.length);
       const itemsToShow = timelineExpanded ? allItems : allItems.slice(-3);
 
       list.innerHTML = itemsToShow.map(item => {
@@ -1024,7 +996,6 @@
         </li>`;
       }).join('');
 
-      // Toggle button
       if (allItems.length > 3) {
         toggle.classList.remove('hidden');
         toggle.textContent = timelineExpanded ? 'Show less' : `Show all (${allItems.length})`;
@@ -1039,7 +1010,7 @@
       return div.innerHTML;
     }
 
-    // ===== FETCH DATA =====
+    // ===== FETCH DATA (GET zamiast POST) =====
     async function fetchData(showLoading) {
       if (showLoading) {
         $('skeleton').classList.remove('hidden');
@@ -1048,14 +1019,11 @@
       }
 
       const dateStr = formatDateISO(currentDate);
-      const url = API_BASE;
+      // Przekazujemy datę jako query param, żeby pasowało do $json.query.date w n8n
+      const url = `${API_BASE}?date=${encodeURIComponent(dateStr)}`;
 
       try {
-        const resp = await fetch(url, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ date: dateStr, patient_id: 'default' })
-        });
+        const resp = await fetch(url); // GET bez body i bez Content-Type
         if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
         const data = await resp.json();
         renderData(data);
@@ -1066,7 +1034,6 @@
           $('errorState').classList.remove('hidden');
           $('dataView').classList.add('hidden');
         }
-        // If silent refresh fails, keep showing existing data
       }
     }
 
@@ -1110,11 +1077,10 @@
     function startAutoRefresh() {
       if (refreshTimer) clearInterval(refreshTimer);
       refreshTimer = setInterval(() => {
-        // Only auto-refresh if viewing today
         if (isToday(currentDate)) {
           fetchData(false);
         }
-      }, 5 * 60 * 1000); // 5 minutes
+      }, 5 * 60 * 1000);
     }
 
     // ===== INIT =====
