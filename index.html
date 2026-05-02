@@ -72,55 +72,47 @@ body{min-height:100vh;background:var(--bg);padding-bottom:32px}
 .mini-sub{font-size:12px;color:var(--text-secondary);margin-top:4px}
 .sleep-vitals{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px}
 .vital-box{background:#f0f4ff;border-radius:var(--radius-sm);padding:10px 12px;text-align:center;transition:background .3s}
-.vital-box.vok{background:var(--calm-bg)}
-.vital-box.vwarn{background:var(--concern-bg)}
-.vital-box.valert{background:var(--attention-bg)}
+.vital-box.vok{background:var(--calm-bg)}.vital-box.vwarn{background:var(--concern-bg)}.vital-box.valert{background:var(--attention-bg)}
 .vital-label{font-size:11px;color:var(--text-muted);margin-bottom:2px}
 .vital-value{font-size:22px;font-weight:700;color:var(--text-primary)}
 .vital-unit{font-size:11px;color:var(--text-secondary)}
 .vital-badge{font-size:11px;font-weight:600;margin-top:3px;padding:1px 6px;border-radius:20px;display:inline-block}
-.vital-badge.vok{background:var(--calm-bg);color:var(--calm-text)}
-.vital-badge.vwarn{background:var(--concern-bg);color:var(--concern-text)}
-.vital-badge.valert{background:var(--attention-bg);color:var(--attention-text)}
+.vital-badge.vok{background:var(--calm-bg);color:var(--calm-text)}.vital-badge.vwarn{background:var(--concern-bg);color:var(--concern-text)}.vital-badge.valert{background:var(--attention-bg);color:var(--attention-text)}
 .sleep-live{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--calm-text);margin-bottom:8px;font-weight:500}
 .sleep-live-dot{width:8px;height:8px;border-radius:50%;background:var(--calm);flex-shrink:0;animation:pulse 2s infinite}
-.sleep-token-hint{font-size:12px;color:var(--text-muted);text-align:center;padding:8px;background:#f8f7f4;border-radius:var(--radius-sm);margin-bottom:8px}
 .timeline-section{margin-top:8px}
 .timeline-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
 .timeline-title{font-size:15px;font-weight:600}
 .timeline-toggle{font-size:13px;font-weight:500;color:var(--calm-text);background:var(--calm-bg);border:none;padding:6px 14px;border-radius:100px;cursor:pointer;min-height:44px}
 .timeline-list{list-style:none}
-.timeline-item{display:flex;align-items:flex-start;gap:12px;padding:10px 0;position:relative}
+.timeline-item{display:flex;align-items:flex-start;gap:12px;padding:10px 0}
 .timeline-item:not(:last-child){border-bottom:1px solid #f0ede8}
 .timeline-dot{width:10px;height:10px;border-radius:50%;margin-top:6px;flex-shrink:0}
-.timeline-dot.motion{background:var(--dot-motion)}
-.timeline-dot.medication{background:var(--dot-medication)}
-.timeline-dot.alert{background:var(--dot-alert)}
-.timeline-dot.door,.timeline-dot.dooropen,.timeline-dot.doorclose{background:var(--dot-door)}
-.timeline-dot.bed{background:var(--dot-bed)}
+.timeline-dot.motion{background:var(--dot-motion)}.timeline-dot.medication{background:var(--dot-medication)}.timeline-dot.alert{background:var(--dot-alert)}.timeline-dot.door,.timeline-dot.dooropen,.timeline-dot.doorclose{background:var(--dot-door)}.timeline-dot.bed{background:var(--dot-bed)}
 .timeline-time{font-size:13px;font-weight:600;color:var(--text-primary);min-width:44px;padding-top:1px}
 .timeline-event{font-size:14px;color:var(--text-secondary);line-height:1.4;flex:1}
 .timeline-empty{text-align:center;padding:24px 16px;color:var(--text-muted);font-size:14px}
 .timeline-item.alert-item{background:var(--attention-bg);border-radius:var(--radius-sm);padding:10px 12px;margin-bottom:4px;border-bottom:none}
-.debug-panel{background:#1e1e1e;color:#0f0;font-family:monospace;font-size:11px;padding:12px;border-radius:var(--radius-sm);margin-top:16px;white-space:pre-wrap;display:none}
+/* ERROR BOX — widoczny zawsze gdy API nie odpowiada */
+.error-box{background:#fff3cd;border:1px solid #ffc107;border-radius:var(--radius-md);padding:16px;margin-bottom:16px}
+.error-box-title{font-size:14px;font-weight:600;color:#856404;margin-bottom:6px}
+.error-box-msg{font-size:12px;color:#856404;word-break:break-all;margin-bottom:10px}
+.error-box-url{font-size:11px;color:#856404;font-family:monospace;background:#fff8e1;padding:4px 6px;border-radius:4px;margin-bottom:10px;word-break:break-all}
+.error-btn{display:inline-flex;align-items:center;gap:6px;padding:8px 16px;border:none;background:var(--calm);color:white;font-size:13px;font-weight:500;border-radius:var(--radius-sm);cursor:pointer}
 .hidden{display:none!important}
 .skeleton{background:linear-gradient(90deg,#e8e5df 25%,#f0ede8 50%,#e8e5df 75%);background-size:200% 100%;animation:shimmer 1.5s ease-in-out infinite;border-radius:var(--radius-sm)}
 .skeleton-banner{height:72px;border-radius:var(--radius-lg);margin-bottom:16px}
-.skeleton-card{height:140px;border-radius:var(--radius-md);margin-bottom:12px}
-.error-state{text-align:center;padding:48px 24px}
-.error-title{font-size:16px;font-weight:600;color:var(--text-primary);margin-bottom:6px}
-.error-message{font-size:14px;color:var(--text-secondary);margin-bottom:20px}
-.error-btn{display:inline-flex;align-items:center;gap:6px;padding:10px 20px;border:none;background:var(--calm);color:white;font-size:14px;font-weight:500;border-radius:var(--radius-sm);cursor:pointer;min-height:44px}
+.skeleton-card{height:120px;border-radius:var(--radius-md);margin-bottom:12px}
+.debug-panel{background:#1e1e1e;color:#0f0;font-family:monospace;font-size:11px;padding:12px;border-radius:var(--radius-sm);margin-top:16px;white-space:pre-wrap;display:none}
 @keyframes shimmer{0%{background-position:-200% 0}100%{background-position:200% 0}}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
-@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
 </style>
 </head>
 <body>
 <div class="container">
   <header class="header">
     <div class="header-left">
-      <svg class="header-logo" viewBox="0 0 28 28" fill="none" aria-label="Peace of Mind logo">
+      <svg class="header-logo" viewBox="0 0 28 28" fill="none">
         <circle cx="14" cy="14" r="13" stroke="#7BAE7F" stroke-width="1.5" fill="#EDF5EE"/>
         <path d="M14 7C11 7 8.5 9.2 8.5 12.5c0 4.5 5.5 9 5.5 9s5.5-4.5 5.5-9C19.5 9.2 17 7 14 7z" fill="#7BAE7F" opacity="0.7"/>
       </svg>
@@ -134,30 +126,37 @@ body{min-height:100vh;background:var(--bg);padding-bottom:32px}
       </svg>
     </button>
   </header>
+
   <nav class="date-nav">
-    <button class="date-nav-btn" id="prevDay" aria-label="Previous day">&#8592;</button>
+    <button class="date-nav-btn" id="prevDay">&#8592;</button>
     <div>
       <div class="date-nav-label" id="dateLabel"></div>
       <div class="date-nav-sublabel" id="dateSublabel"></div>
     </div>
-    <button class="date-nav-btn" id="nextDay" aria-label="Next day">&#8594;</button>
+    <button class="date-nav-btn" id="nextDay">&#8594;</button>
   </nav>
-  <main id="mainContent">
+
+  <main>
+    <!-- Skeleton loader -->
     <div id="skeleton">
       <div class="skeleton skeleton-banner"></div>
       <div class="skeleton skeleton-card"></div>
       <div class="skeleton skeleton-card"></div>
       <div class="skeleton skeleton-card"></div>
     </div>
-    <div id="errorState" class="hidden">
-      <div class="error-state">
-        <div class="error-title">Could not load data</div>
-        <div class="error-message" id="errorMsg">We couldn&#x27;t reach the server right now. Please check your connection and try again.</div>
-        <button class="error-btn" id="retryBtn">&#8635; Try again</button>
-      </div>
+
+    <!-- Error box — pokazuje sie gdy API nie odpowie w 10s -->
+    <div id="errorBox" class="error-box hidden">
+      <div class="error-box-title">&#9888; Could not load data</div>
+      <div class="error-box-msg" id="errorMsg"></div>
+      <div class="error-box-url" id="errorUrl"></div>
+      <button class="error-btn" id="retryBtn">&#8635; Retry</button>
     </div>
+
+    <!-- Data view -->
     <div id="dataView" class="hidden">
       <div id="statusBanner" class="status-banner"></div>
+
       <div id="medsCard" class="card">
         <div class="card-header">
           <div class="card-header-left">
@@ -169,6 +168,7 @@ body{min-height:100vh;background:var(--bg);padding-bottom:32px}
         <div id="medsIndicators" class="meds-indicators"></div>
         <div id="medsSummary" class="card-summary"></div>
       </div>
+
       <div id="activityCard" class="card">
         <div class="card-header">
           <div class="card-header-left">
@@ -180,6 +180,7 @@ body{min-height:100vh;background:var(--bg);padding-bottom:32px}
         <div id="activitySummary" class="card-summary"></div>
         <div id="activityStats" class="card-stats"></div>
       </div>
+
       <div id="sleepCard" class="card">
         <div class="card-header">
           <div class="card-header-left">
@@ -191,36 +192,16 @@ body{min-height:100vh;background:var(--bg);padding-bottom:32px}
         <div id="sleepLive" class="sleep-live hidden">
           <div class="sleep-live-dot"></div><span>Live monitoring active</span>
         </div>
-        <div id="sleepTokenHint" class="sleep-token-hint hidden">&#128274; Add HA_TOKEN to see live vitals</div>
         <div id="sleepVitals" class="sleep-vitals">
-          <div id="vboxBreathing" class="vital-box">
-            <div class="vital-label">Breathing</div>
-            <div class="vital-value" id="vBreathing">--</div>
-            <div class="vital-unit">breaths/min</div>
-            <div id="vBreathingBadge" class="vital-badge">--</div>
-          </div>
-          <div id="vboxHeart" class="vital-box">
-            <div class="vital-label">Heart Rate</div>
-            <div class="vital-value" id="vHeart">--</div>
-            <div class="vital-unit">bpm</div>
-            <div id="vHeartBadge" class="vital-badge">--</div>
-          </div>
-          <div id="vboxPresence" class="vital-box">
-            <div class="vital-label">In Bed</div>
-            <div class="vital-value" id="vPresence">--</div>
-            <div class="vital-unit">&nbsp;</div>
-            <div id="vPresenceBadge" class="vital-badge">--</div>
-          </div>
-          <div id="vboxLight" class="vital-box">
-            <div class="vital-label">Light Level</div>
-            <div class="vital-value" id="vLight">--</div>
-            <div class="vital-unit">lux</div>
-            <div id="vLightBadge" class="vital-badge">--</div>
-          </div>
+          <div id="vboxBreathing" class="vital-box"><div class="vital-label">Breathing</div><div class="vital-value" id="vBreathing">--</div><div class="vital-unit">breaths/min</div><div id="vBreathingBadge" class="vital-badge">--</div></div>
+          <div id="vboxHeart" class="vital-box"><div class="vital-label">Heart Rate</div><div class="vital-value" id="vHeart">--</div><div class="vital-unit">bpm</div><div id="vHeartBadge" class="vital-badge">--</div></div>
+          <div id="vboxPresence" class="vital-box"><div class="vital-label">In Bed</div><div class="vital-value" id="vPresence">--</div><div class="vital-unit">&nbsp;</div><div id="vPresenceBadge" class="vital-badge">--</div></div>
+          <div id="vboxLight" class="vital-box"><div class="vital-label">Light Level</div><div class="vital-value" id="vLight">--</div><div class="vital-unit">lux</div><div id="vLightBadge" class="vital-badge">--</div></div>
         </div>
         <div id="sleepSummary" class="card-summary"></div>
         <div id="sleepStats" class="card-stats"></div>
       </div>
+
       <div id="safetyCard" class="card">
         <div class="card-header">
           <div class="card-header-left">
@@ -232,47 +213,48 @@ body{min-height:100vh;background:var(--bg);padding-bottom:32px}
         <div id="safetySummary" class="card-summary"></div>
         <div id="safetyStats" class="card-stats"></div>
       </div>
+
       <div class="trend-row">
-        <div class="mini-panel">
-          <div class="mini-label">Day trend</div>
-          <div class="mini-value" id="trendValue"></div>
-          <div class="mini-sub" id="trendSub">Compared with baseline</div>
-        </div>
-        <div class="mini-panel">
-          <div class="mini-label">Baseline</div>
-          <div class="mini-value" id="baselineValue"></div>
-          <div class="mini-sub" id="baselineSub">7-day averages</div>
-        </div>
+        <div class="mini-panel"><div class="mini-label">Day trend</div><div class="mini-value" id="trendValue"></div><div class="mini-sub" id="trendSub"></div></div>
+        <div class="mini-panel"><div class="mini-label">Baseline</div><div class="mini-value" id="baselineValue"></div><div class="mini-sub" id="baselineSub"></div></div>
       </div>
+
       <div class="timeline-section">
         <div class="timeline-header">
           <div class="timeline-title" id="timelineTitle">Today&#x27;s Timeline</div>
-          <button class="timeline-toggle" id="timelineToggle">Show all</button>
+          <button class="timeline-toggle hidden" id="timelineToggle">Show all</button>
         </div>
         <ul class="timeline-list" id="timelineList"></ul>
       </div>
+
       <div class="debug-panel" id="debugPanel"></div>
     </div>
   </main>
 </div>
+
 <script>
 (function(){
 try{if(window.Telegram)Telegram.WebApp.ready(),Telegram.WebApp.expand();}catch(e){}
 
+// ═══ CONFIG ════════════════════════════════════════════════════
 var API_BASE = 'https://n8n.srv1161536.hstgr.cloud/webhook/daily-summary';
 var HA_BASE  = 'https://ha.seniorslearnai.co.uk';
 var HA_TOKEN = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiI1MjJiZTZiYmE3MjA0ZWZiYmY2OGI0MTYwYjViYWFiNyIsImlhdCI6MTc3Nzc0MTY5NiwiZXhwIjoyMDkzMTAxNjk2fQ.uEBaIEK4w2fFE3MR6fXiHDBgjdrRcbnIALcl6XUIMro';
+var FETCH_TIMEOUT_MS = 10000; // 10 sekund timeout
 
-var SLEEP_ENT={
-  breathing:'sensor.bedroom_breathing_sensor_czestotliwosc_oddechu',
-  heartRate:'sensor.bedroom_breathing_sensor_tetno',
-  presence:'binary_sensor.bedroom_breathing_sensor_obecnosc_osoby',
-  light:'sensor.bedroom_breathing_sensor_natezenie_swiatla'
+var SLEEP_ENT = {
+  breathing : 'sensor.bedroom_breathing_sensor_czestotliwosc_oddechu',
+  heartRate : 'sensor.bedroom_breathing_sensor_tetno',
+  presence  : 'binary_sensor.bedroom_breathing_sensor_obecnosc_osoby',
+  light     : 'sensor.bedroom_breathing_sensor_natezenie_swiatla'
 };
+// ══════════════════════════════════════════════════════════════
 
-var currentDate=new Date(),timelineExpanded=false,currentData=null,refreshTimer=null,sleepTimer=null;
+var currentDate=new Date(), timelineExpanded=false, currentData=null;
+var refreshTimer=null, sleepTimer=null;
+
 function $(i){return document.getElementById(i);}
-function esc(s){var d=document.createElement('div');d.textContent=String(s||'');return d.innerHTML;}
+function esc(s){var d=document.createElement('div');d.textContent=String(s==null?'':s);return d.innerHTML;}
 function fDate(d){return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate());}
 function pad(n){return String(n).padStart(2,'0');}
 function fDisp(d){return d.toLocaleDateString('en-GB',{month:'long',day:'numeric',year:'numeric'});}
@@ -281,6 +263,16 @@ function isToday(d){var n=new Date();return d.getFullYear()===n.getFullYear()&&d
 function isYest(d){var y=new Date();y.setDate(y.getDate()-1);return d.getFullYear()===y.getFullYear()&&d.getMonth()===y.getMonth()&&d.getDate()===y.getDate();}
 function fTime(v){if(!v)return'';try{return new Date(v).toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});}catch(e){return'';}}
 function fHours(h){if(h==null||isNaN(h))return'';return Number(h).toFixed(1)+'h';}
+function safe(obj){return obj||{};}
+function safeArr(a){return Array.isArray(a)?a:[];}
+
+// fetch with timeout
+function fetchWithTimeout(url, opts, ms){
+  var controller=new AbortController();
+  var timer=setTimeout(function(){controller.abort();},ms||FETCH_TIMEOUT_MS);
+  return fetch(url, Object.assign({signal:controller.signal},opts||{}))
+    .finally(function(){clearTimeout(timer);});
+}
 
 var STATUS_MAP={
   'calm':{emoji:'😊',label:'All is well today',sub:'Everything looks good'},
@@ -297,7 +289,18 @@ function updateDateDisplay(){
   $('nextDay').disabled=isToday(currentDate);
 }
 
+function showSkeleton(){$('skeleton').classList.remove('hidden');$('errorBox').classList.add('hidden');$('dataView').classList.add('hidden');}
+function showError(msg,url){
+  $('skeleton').classList.add('hidden');
+  $('errorBox').classList.remove('hidden');
+  $('dataView').classList.add('hidden');
+  $('errorMsg').textContent=msg||'Unknown error';
+  $('errorUrl').textContent='URL: '+(url||API_BASE);
+}
+function showData(){$('skeleton').classList.add('hidden');$('errorBox').classList.add('hidden');$('dataView').classList.remove('hidden');}
+
 function renderBadge(el,status){
+  if(!el)return;
   var s=(status||'').toUpperCase();
   var cls='badge-ok',label='OK';
   if(['OK','NORMAL'].includes(s)){cls='badge-ok';label=s==='NORMAL'?'Normal':'OK';}
@@ -308,122 +311,154 @@ function renderBadge(el,status){
 function medSlot(label,status){
   var cls='pending',icon='○';
   if(status==='taken'){cls='taken';icon='✓';}
-  else if(['missed','skipped'].includes(status)){cls='missed';icon='✗';}
+  else if(status==='missed'||status==='skipped'){cls='missed';icon='✗';}
   return '<div class="med-slot"><div class="med-check '+cls+'">'+icon+'</div><span>'+esc(label)+'</span></div>';
 }
-function statEl(label,value){return '<div class="stat"><span>'+esc(label)+'</span><span class="stat-value">'+esc(String(value))+'</span></div>';}
+function statEl(label,value){return '<div class="stat"><span>'+esc(label)+'</span><span class="stat-value">'+esc(String(value==null?'--':value))+'</span></div>';}
 
-function vitalState(value,okMin,okMax,warnMin,warnMax){
-  var v=parseFloat(value);if(isNaN(v))return null;
-  if(v<warnMin||v>warnMax)return'valert';
-  if(v<okMin||v>okMax)return'vwarn';
-  return'vok';
-}
-function setVital(boxId,valId,badgeId,rawVal,label,state){
-  var box=$(boxId);box.className='vital-box '+(state||'');
-  $(valId).textContent=rawVal!=null?rawVal:'--';
+// ── Sleep vitals ──────────────────────────────────────────────
+function setVital(boxId,valId,badgeId,raw,label,state){
+  var box=$(boxId);if(!box)return;
+  box.className='vital-box '+(state||'');
+  $(valId).textContent=(raw!=null&&raw!=='')?raw:'--';
   var b=$(badgeId);b.className='vital-badge '+(state||'');b.textContent=label||'--';
 }
+function vRange(v,okMin,okMax,warnMin,warnMax){
+  var n=parseFloat(v);if(isNaN(n))return'';
+  if(n<warnMin||n>warnMax)return'valert';
+  if(n<okMin||n>okMax)return'vwarn';
+  return'vok';
+}
 async function fetchHA(entity){
-  if(!HA_TOKEN)return null;
   try{
-    var r=await fetch(HA_BASE+'/api/states/'+entity,{headers:{Authorization:'Bearer '+HA_TOKEN,'Content-Type':'application/json'}});
+    var r=await fetchWithTimeout(HA_BASE+'/api/states/'+entity,
+      {headers:{Authorization:'Bearer '+HA_TOKEN,'Content-Type':'application/json'}},5000);
     if(!r.ok)return null;
-    var d=await r.json();return d.state;
+    return (await r.json()).state;
   }catch(e){return null;}
 }
 async function updateSleepVitals(){
-  if(!isToday(currentDate))return;
-  if(!HA_TOKEN){$('sleepTokenHint').classList.remove('hidden');$('sleepVitals').classList.add('hidden');return;}
-  $('sleepTokenHint').classList.add('hidden');$('sleepVitals').classList.remove('hidden');
-  var results=await Promise.all([fetchHA(SLEEP_ENT.breathing),fetchHA(SLEEP_ENT.heartRate),fetchHA(SLEEP_ENT.presence),fetchHA(SLEEP_ENT.light)]);
-  var br=results[0],hr=results[1],pr=results[2],lx=results[3];
-  var brV=parseFloat(br),brS=vitalState(br,12,20,8,25);
-  setVital('vboxBreathing','vBreathing','vBreathingBadge',isNaN(brV)?'--':brV.toFixed(0),brS==='vok'?'Normal':brS==='vwarn'?'Monitor':'⚠ Check',brS||'');
-  var hrV=parseFloat(hr),hrS=vitalState(hr,50,100,45,110);
-  setVital('vboxHeart','vHeart','vHeartBadge',isNaN(hrV)?'--':hrV.toFixed(0),hrS==='vok'?'Normal':hrS==='vwarn'?'Monitor':'⚠ Check',hrS||'');
+  if(!isToday(currentDate)||!HA_TOKEN)return;
+  var res=await Promise.all([fetchHA(SLEEP_ENT.breathing),fetchHA(SLEEP_ENT.heartRate),fetchHA(SLEEP_ENT.presence),fetchHA(SLEEP_ENT.light)]);
+  var br=res[0],hr=res[1],pr=res[2],lx=res[3];
+  var brV=parseFloat(br),brS=vRange(br,12,20,8,25);
+  setVital('vboxBreathing','vBreathing','vBreathingBadge',isNaN(brV)?null:brV.toFixed(0),brS==='vok'?'Normal':brS==='vwarn'?'Monitor':brS==='valert'?'⚠ Check':'--',brS);
+  var hrV=parseFloat(hr),hrS=vRange(hr,50,100,45,110);
+  setVital('vboxHeart','vHeart','vHeartBadge',isNaN(hrV)?null:hrV.toFixed(0),hrS==='vok'?'Normal':hrS==='vwarn'?'Monitor':hrS==='valert'?'⚠ Check':'--',hrS);
   var inBed=(pr==='on');
-  setVital('vboxPresence','vPresence','vPresenceBadge',inBed?'Yes':'No',inBed?'In bed':'Not in bed',inBed?'vok':'');
+  setVital('vboxPresence','vPresence','vPresenceBadge',inBed?'Yes':'No',inBed?'In bed':'Away',inBed?'vok':'');
   $('sleepLive').classList.toggle('hidden',!inBed);
   var lxV=parseFloat(lx),lxS=(!isNaN(lxV)&&lxV>50)?'valert':(!isNaN(lxV)&&lxV>10)?'vwarn':'vok';
-  setVital('vboxLight','vLight','vLightBadge',isNaN(lxV)?'--':lxV.toFixed(0),(!isNaN(lxV)&&lxV>50)?'Light on':(!isNaN(lxV)&&lxV>10)?'Dim light':'Dark',lxS);
+  setVital('vboxLight','vLight','vLightBadge',isNaN(lxV)?null:lxV.toFixed(0),(!isNaN(lxV)&&lxV>50)?'Light on':(!isNaN(lxV)&&lxV>10)?'Dim':'Dark',lxS);
 }
 
-function computeTrend(data){
-  var stats=data.stats||{},bl=data.baseline||{};
-  var total=Number(stats.totalmotion||0),avg=Number(bl.avgmotionevents||0);
+function computeTrend(stats,baseline){
+  var total=Number((stats||{}).totalmotion||0),avg=Number((baseline||{}).avgmotionevents||0);
   if(!avg)return{label:'No baseline yet',sub:'Waiting for 7-day average'};
   var r=total/avg;
-  if(r<0.5)return{label:'Below usual',sub:total+' today vs '+avg+' baseline motions'};
-  if(r>1.5)return{label:'Above usual',sub:total+' today vs '+avg+' baseline motions'};
-  return{label:'Near baseline',sub:total+' today vs '+avg+' baseline motions'};
+  if(r<0.5)return{label:'Below usual',sub:total+' today vs '+avg+' baseline'};
+  if(r>1.5)return{label:'Above usual',sub:total+' today vs '+avg+' baseline'};
+  return{label:'Near baseline',sub:total+' today vs '+avg+' baseline'};
 }
 
 function renderTimeline(events,alerts){
   var list=$('timelineList'),toggle=$('timelineToggle');
   var all=[];
-  (events||[]).forEach(function(e){all.push({time:e.time,event:e.event,type:e.type||'motion',isAlert:false});});
-  (alerts||[]).forEach(function(a){all.push({time:a.time,event:a.message,type:'alert',isAlert:true});});
+  safeArr(events).forEach(function(e){all.push({time:e.time,event:e.event||e.description||'',type:e.type||'motion',isAlert:false});});
+  safeArr(alerts).forEach(function(a){all.push({time:a.time,event:a.message||a.event||'',type:'alert',isAlert:true});});
   all.sort(function(a,b){return new Date(b.time||0)-new Date(a.time||0);});
-  if(!all.length){list.innerHTML='<li class="timeline-empty">'+(isToday(currentDate)?'No events recorded yet today.':'No events recorded for this day.')+'</li>';toggle.classList.add('hidden');return;}
+  if(!all.length){list.innerHTML='<li class="timeline-empty">'+(isToday(currentDate)?'No events recorded yet today.':'No events for this day.')+'</li>';toggle.classList.add('hidden');return;}
   var items=timelineExpanded?all:all.slice(0,5);
-  var dotClass=function(item){if(item.isAlert)return'alert';var t=item.type;if(t==='bed')return'bed';if(t==='medication')return'medication';if(t&&t.startsWith('door'))return'door';return'motion';};
-  list.innerHTML=items.map(function(item){return'<li class="timeline-item'+(item.isAlert?' alert-item':'')+'"><div class="timeline-dot '+dotClass(item)+'"></div><div class="timeline-time">'+fTime(item.time)+'</div><div class="timeline-event">'+esc(item.event)+'</div></li>';}).join('');
+  var dot=function(item){if(item.isAlert)return'alert';var t=item.type||'';if(t==='bed')return'bed';if(t==='medication')return'medication';if(t.startsWith('door'))return'door';return'motion';};
+  list.innerHTML=items.map(function(i){return'<li class="timeline-item'+(i.isAlert?' alert-item':'')+'"><div class="timeline-dot '+dot(i)+'"></div><div class="timeline-time">'+fTime(i.time)+'</div><div class="timeline-event">'+esc(i.event)+'</div></li>';}).join('');
   if(all.length>5){toggle.classList.remove('hidden');toggle.textContent=timelineExpanded?'Show less':'Show all ('+all.length+')';}
   else toggle.classList.add('hidden');
 }
 
 function renderData(data){
   currentData=data;
-  $('debugPanel').textContent='API response:
+  $('debugPanel').textContent='=== RAW API RESPONSE ===
 '+JSON.stringify(data,null,2);
-  var score=data.dayscore||'no-data';
-  if(score==='needsattention')score='needs-attention';
-  if(score==='slightconcern')score='slight-concern';
-  if(score==='nodata')score='no-data';
+
+  // normalise score key
+  var score=(data.dayscore||data.day_score||'no-data').toString()
+    .replace('needsattention','needs-attention')
+    .replace('slightconcern','slight-concern')
+    .replace('nodata','no-data');
   var info=STATUS_MAP[score]||STATUS_MAP['no-data'];
   $('statusBanner').className='status-banner '+score;
   $('statusBanner').innerHTML='<span class="status-emoji">'+info.emoji+'</span><div><div class="status-label">'+esc(info.label)+'</div><div class="status-sublabel">'+esc(info.sub)+'</div></div>';
-  var st=data.status||{},summary=data.summarytext||data.summary||{},stats=data.stats||{},alerts=data.alerts||[],baseline=data.baseline||{},sleep=data.sleep||{},timeline=data.timeline||[];
+
+  var st=safe(data.status);
+  var summary=safe(data.summarytext||data.summary);
+  var stats=safe(data.stats);
+  var alerts=safeArr(data.alerts);
+  var baseline=safe(data.baseline);
+  var sleep=safe(data.sleep);
+  var timeline=safeArr(data.timeline);
+
+  // Medications
   renderBadge($('medsBadge'),st.meds);
-  $('medsSummary').textContent=(typeof summary==='string'?summary:summary.meds)||'No medication data available.';
+  $('medsSummary').textContent=(typeof summary==='string'?summary:(summary.meds||''))||'No medication data available.';
   $('medsIndicators').innerHTML=medSlot('Morning',stats.medsmorning||'pending')+medSlot('Evening',stats.medsevening||'pending');
   $('medsCard').className='card'+((st.meds||'').toUpperCase()==='ALERT'?' has-alert':'');
+
+  // Activity
   renderBadge($('activityBadge'),st.activity);
-  $('activitySummary').textContent=(typeof summary==='object'?summary.activity:'')||'No activity data available.';
-  $('activityStats').innerHTML=[statEl('First motion',fTime(stats.firstmotion)||'--'),statEl('Motions',stats.totalmotion!=null?stats.totalmotion:0),statEl('Night',stats.nightmotion!=null?stats.nightmotion:0)].join('');
-  $('activityCard').className='card'+(['LOW','UNUSUAL','ALERT'].indexOf((st.activity||'').toUpperCase())>-1?' has-alert':'');
-  $('sleepSummary').textContent=(typeof summary==='object'?summary.sleep:'')||(sleep.inbed===true?'Currently in bed.':sleep.totalinbedhours?'Time in bed today: '+fHours(sleep.totalinbedhours)+'.':sleep.eventscount>0?'Bed-related events today: '+sleep.eventscount+'.':'No sleep/bed data recorded yet.');
-  $('sleepStats').innerHTML=[statEl('In bed now',sleep.inbed===true?'Yes':sleep.inbed===false?'No':'?'),statEl('Time in bed',sleep.totalinbedhours?fHours(sleep.totalinbedhours):'?'),statEl('Bed events',sleep.eventscount!=null?sleep.eventscount:0)].join('');
+  $('activitySummary').textContent=(summary.activity||'No activity data available.');
+  $('activityStats').innerHTML=[
+    statEl('First motion',fTime(stats.firstmotion)||'--'),
+    statEl('Motions',stats.totalmotion!=null?stats.totalmotion:0),
+    statEl('Night',stats.nightmotion!=null?stats.nightmotion:0)
+  ].join('');
+  $('activityCard').className='card'+(['LOW','UNUSUAL','ALERT'].includes((st.activity||'').toUpperCase())?' has-alert':'');
+
+  // Sleep
+  $('sleepSummary').textContent=summary.sleep||(sleep.inbed===true?'Currently in bed.':sleep.totalinbedhours?'Time in bed: '+fHours(sleep.totalinbedhours)+'.':(sleep.eventscount>0?'Bed events today: '+sleep.eventscount+'.':'No sleep data recorded yet.'));
+  $('sleepStats').innerHTML=[
+    statEl('In bed now',sleep.inbed===true?'Yes':sleep.inbed===false?'No':'?'),
+    statEl('Time in bed',sleep.totalinbedhours?fHours(sleep.totalinbedhours):'?'),
+    statEl('Bed events',sleep.eventscount!=null?sleep.eventscount:0)
+  ].join('');
   $('sleepCard').className='card';
+
+  // Safety
   renderBadge($('safetyBadge'),st.safety);
-  $('safetySummary').textContent=(typeof summary==='object'?summary.safety:'')||'No safety data available.';
-  $('safetyStats').innerHTML=[statEl('Door events',stats.dooreventscount!=null?stats.dooreventscount:0),statEl('Alerts',alerts.length),statEl('Baseline doors',baseline.avgdoorevents!=null?baseline.avgdoorevents:'--')].join('');
-  $('safetyCard').className='card'+(['ATTENTION','ALERT','WARNING'].indexOf((st.safety||'').toUpperCase())>-1||alerts.length>0?' has-alert':'');
-  var trend=computeTrend(data);
+  $('safetySummary').textContent=summary.safety||'No safety data available.';
+  $('safetyStats').innerHTML=[
+    statEl('Door events',stats.dooreventscount!=null?stats.dooreventscount:0),
+    statEl('Alerts',alerts.length),
+    statEl('Baseline doors',baseline.avgdoorevents!=null?baseline.avgdoorevents:'--')
+  ].join('');
+  $('safetyCard').className='card'+(['ATTENTION','ALERT','WARNING'].includes((st.safety||'').toUpperCase())||alerts.length>0?' has-alert':'');
+
+  // Trend / Baseline
+  var trend=computeTrend(stats,baseline);
   $('trendValue').textContent=trend.label;$('trendSub').textContent=trend.sub;
   $('baselineValue').textContent=baseline.dayssampled?baseline.dayssampled+' days':'No baseline';
   $('baselineSub').textContent='Motion: '+(baseline.avgmotionevents||'--')+' · Night: '+(baseline.avgnightmotion||'--')+' · Doors: '+(baseline.avgdoorevents||'--');
+
   renderTimeline(timeline,alerts);
-  $('skeleton').classList.add('hidden');$('errorState').classList.add('hidden');$('dataView').classList.remove('hidden');
+  showData();
   updateSleepVitals();
 }
 
 async function fetchData(showLoading){
-  if(showLoading===undefined)showLoading=true;
-  if(showLoading){$('skeleton').classList.remove('hidden');$('errorState').classList.add('hidden');$('dataView').classList.add('hidden');}
+  if(showLoading!==false) showSkeleton();
   var url=API_BASE+'?date='+encodeURIComponent(fDate(currentDate));
   try{
-    var resp=await fetch(url);
-    if(!resp.ok)throw new Error('HTTP '+resp.status);
-    var data=await resp.json();
-    if(Array.isArray(data))data=data[0];
+    var resp=await fetchWithTimeout(url,{},FETCH_TIMEOUT_MS);
+    if(!resp.ok) throw new Error('Server returned HTTP '+resp.status);
+    var text=await resp.text();
+    var data;
+    try{ data=JSON.parse(text); }
+    catch(e){ throw new Error('Invalid JSON from server: '+text.substring(0,120)); }
+    if(Array.isArray(data)) data=data[0];
+    if(!data||typeof data!=='object') throw new Error('Empty or unexpected response');
     renderData(data);
   }catch(err){
-    console.error('Fetch error:',err);
-    $('skeleton').classList.add('hidden');
-    $('errorMsg').textContent='Could not load data: '+err.message+'. URL: '+url;
-    $('errorState').classList.remove('hidden');$('dataView').classList.add('hidden');
+    console.error(err);
+    showError(err.name==='AbortError'?'Request timed out after 10 seconds. Is N8N workflow active?':err.message, url);
   }
 }
 
@@ -436,12 +471,14 @@ document.addEventListener('keydown',function(e){if(e.key==='d'||e.key==='D'){var
 
 function startAutoRefresh(){
   if(refreshTimer)clearInterval(refreshTimer);
-  refreshTimer=setInterval(function(){if(isToday(currentDate))fetchData(false);},60*1000);
+  refreshTimer=setInterval(function(){if(isToday(currentDate))fetchData(false);},60000);
   if(sleepTimer)clearInterval(sleepTimer);
-  sleepTimer=setInterval(function(){if(isToday(currentDate))updateSleepVitals();},30*1000);
+  sleepTimer=setInterval(function(){if(isToday(currentDate))updateSleepVitals();},30000);
 }
 
-updateDateDisplay();fetchData(true);startAutoRefresh();
+updateDateDisplay();
+fetchData(true);
+startAutoRefresh();
 })();
 </script>
 </body>
