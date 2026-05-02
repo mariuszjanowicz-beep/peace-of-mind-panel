@@ -1,200 +1,448 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>Peace of Mind Panel Premium</title>
-  <script src="https://telegram.org/js/telegram-web-app.js"></script>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <style>
-    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-    :root{
-      --bg:#f5f3ee;--card:#ffffff;--text-primary:#2c2c2c;--text-secondary:#6b6b6b;--text-muted:#9a9a9a;
-      --calm:#7bae7f;--calm-bg:#edf5ee;--calm-text:#3d6b40;
-      --concern:#d4a052;--concern-bg:#fdf3e4;--concern-text:#8b6520;
-      --attention:#d46a6a;--attention-bg:#faeaea;--attention-text:#8b3030;
-      --sleep:#7b8fcf;--sleep-bg:#eef1fb;--sleep-text:#4b5d95;
-      --border:#e8e5df;--shadow:0 1px 3px rgba(0,0,0,.04),0 4px 12px rgba(0,0,0,.03);
-      --radius-sm:8px;--radius-md:12px;--radius-lg:20px;
-      --dot-motion:#7bae7f;--dot-medication:#5b9bd5;--dot-alert:#d46a6a;--dot-door:#a8a8a8;--dot-bed:#7b8fcf;
-    }
-    html{font-family:Inter,-apple-system,BlinkMacSystemFont,sans-serif;font-size:15px;line-height:1.5;color:var(--text-primary);background:var(--bg);-webkit-font-smoothing:antialiased}
-    body{min-height:100vh;background:var(--bg);padding-bottom:32px}
-    .container{max-width:560px;margin:0 auto;padding:0 16px}
-    .header{display:flex;align-items:center;justify-content:space-between;padding:16px 0 12px}
-    .header-left{display:flex;align-items:center;gap:10px}.header-logo{width:28px;height:28px}.header-title{font-size:16px;font-weight:600}.header-date{font-size:13px;color:var(--text-secondary)}
-    .refresh-btn,.date-nav-btn{width:44px;height:44px;display:flex;align-items:center;justify-content:center;border:none;background:transparent;border-radius:var(--radius-sm);cursor:pointer;color:var(--text-secondary)}
-    .date-nav{display:flex;align-items:center;justify-content:center;gap:16px;padding:8px 0 16px}.date-nav-btn{border:1px solid var(--border);background:var(--card)}.date-nav-label{font-size:15px;font-weight:500;min-width:140px;text-align:center}.date-nav-sublabel{font-size:12px;color:var(--text-muted)}
-    .status-banner{border-radius:var(--radius-lg);padding:18px 20px;display:flex;align-items:center;gap:14px;margin-bottom:16px}.status-banner.calm{background:var(--calm-bg)}.status-banner.slight-concern{background:var(--concern-bg)}.status-banner.needs-attention{background:var(--attention-bg)}.status-banner.no-data{background:#f0f0f0}
-    .status-emoji{font-size:28px;line-height:1}.status-label{font-size:17px;font-weight:600}.status-sublabel{font-size:13px;margin-top:2px;color:var(--text-secondary)}
-    .grid{display:grid;gap:12px}.card{background:var(--card);border-radius:var(--radius-md);box-shadow:var(--shadow);padding:16px;margin-bottom:12px;border-left:3px solid transparent}.card.has-alert{border-left-color:var(--attention)}
-    .card-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}.card-header-left{display:flex;align-items:center;gap:10px}
-    .card-icon{width:36px;height:36px;border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center;flex-shrink:0}
-    .card-icon.meds{background:#ede7f6;color:#7e57c2}.card-icon.activity{background:#e8f5e9;color:#66bb6a}.card-icon.safety{background:#e3f2fd;color:#42a5f5}.card-icon.sleep{background:var(--sleep-bg);color:var(--sleep-text)}.card-icon.baseline{background:#f3efe8;color:#8a6e3d}
-    .card-title{font-size:15px;font-weight:600}
-    .badge{display:inline-flex;align-items:center;padding:3px 10px;border-radius:100px;font-size:12px;font-weight:600;letter-spacing:.02em;text-transform:uppercase}.badge-ok,.badge-normal{background:var(--calm-bg);color:var(--calm-text)}.badge-pending,.badge-warning{background:var(--concern-bg);color:var(--concern-text)}.badge-alert,.badge-attention,.badge-low,.badge-unusual{background:var(--attention-bg);color:var(--attention-text)}.badge-sleep{background:var(--sleep-bg);color:var(--sleep-text)}
-    .card-summary{font-size:14px;color:var(--text-secondary);line-height:1.5;margin-bottom:12px}
-    .card-stats{display:flex;gap:10px;flex-wrap:wrap}.stat{display:flex;align-items:center;gap:6px;font-size:13px;color:var(--text-secondary);background:#f8f7f4;padding:6px 10px;border-radius:var(--radius-sm)}.stat-value{font-weight:600;color:var(--text-primary)}
-    .meds-indicators{display:flex;gap:12px;margin-bottom:12px}.med-slot{display:flex;align-items:center;gap:6px;font-size:13px;color:var(--text-secondary)}.med-check{width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0}.med-check.taken{background:var(--calm);color:white}.med-check.pending{background:var(--concern-bg);border:2px solid var(--concern);color:var(--concern)}.med-check.missed{background:var(--attention-bg);border:2px solid var(--attention);color:var(--attention)}
-    .trend-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}.mini-panel{padding:12px;border-radius:12px;background:#f8f7f4}.mini-label{font-size:12px;color:var(--text-muted);margin-bottom:4px}.mini-value{font-size:15px;font-weight:600}.mini-sub{font-size:12px;color:var(--text-secondary);margin-top:4px}
-    .timeline-section{margin-top:8px}.timeline-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}.timeline-title{font-size:15px;font-weight:600}.timeline-toggle{font-size:13px;font-weight:500;color:var(--calm-text);background:var(--calm-bg);border:none;padding:6px 14px;border-radius:100px;cursor:pointer;min-height:44px}.timeline-list{list-style:none}.timeline-item{display:flex;align-items:flex-start;gap:12px;padding:10px 0;position:relative}.timeline-item:not(:last-child){border-bottom:1px solid #f0ede8}.timeline-dot{width:10px;height:10px;border-radius:50%;margin-top:6px;flex-shrink:0}.timeline-dot.motion{background:var(--dot-motion)}.timeline-dot.medication{background:var(--dot-medication)}.timeline-dot.alert{background:var(--dot-alert)}.timeline-dot.door{background:var(--dot-door)}.timeline-dot.bed{background:var(--dot-bed)}.timeline-time{font-size:13px;font-weight:600;color:var(--text-primary);min-width:44px;padding-top:1px}.timeline-event{font-size:14px;color:var(--text-secondary);line-height:1.4;flex:1}.timeline-empty{text-align:center;padding:24px 16px;color:var(--text-muted);font-size:14px}.timeline-item.alert-item{background:var(--attention-bg);border-radius:var(--radius-sm);padding:10px 12px;margin-bottom:4px;border-bottom:none}
-    .hidden{display:none!important}.skeleton{background:linear-gradient(90deg,#e8e5df 25%,#f0ede8 50%,#e8e5df 75%);background-size:200% 100%;animation:shimmer 1.5s ease-in-out infinite;border-radius:var(--radius-sm)}.skeleton-banner{height:72px;border-radius:var(--radius-lg);margin-bottom:16px}.skeleton-card{height:140px;border-radius:var(--radius-md);margin-bottom:12px}
-    .error-state{text-align:center;padding:48px 24px}.error-title{font-size:16px;font-weight:600;color:var(--text-primary);margin-bottom:6px}.error-message{font-size:14px;color:var(--text-secondary);margin-bottom:20px}.error-btn{display:inline-flex;align-items:center;gap:6px;padding:10px 20px;border:none;background:var(--calm);color:white;font-size:14px;font-weight:500;border-radius:var(--radius-sm);cursor:pointer;min-height:44px}
-    @keyframes shimmer{0%{background-position:-200% 0}100%{background-position:200% 0}}
-    @media (prefers-reduced-motion: reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Peace of Mind Panel Premium</title>
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+--bg:#f5f3ee;--card:#ffffff;--text-primary:#2c2c2c;--text-secondary:#6b6b6b;--text-muted:#9a9a9a;
+--calm:#7bae7f;--calm-bg:#edf5ee;--calm-text:#3d6b40;
+--concern:#d4a052;--concern-bg:#fdf3e4;--concern-text:#8b6520;
+--attention:#d46a6a;--attention-bg:#faeaea;--attention-text:#8b3030;
+--sleep:#7b8fcf;--sleep-bg:#eef1fb;--sleep-text:#4b5d95;
+--border:#e8e5df;--shadow:0 1px 3px rgba(0,0,0,.04),0 4px 12px rgba(0,0,0,.03);
+--radius-sm:8px;--radius-md:12px;--radius-lg:20px;
+--dot-motion:#7bae7f;--dot-medication:#5b9bd5;--dot-alert:#d46a6a;--dot-door:#a8a8a8;--dot-bed:#7b8fcf}
+html{font-family:Inter,-apple-system,BlinkMacSystemFont,sans-serif;font-size:15px;line-height:1.5;color:var(--text-primary);background:var(--bg);-webkit-font-smoothing:antialiased}
+body{min-height:100vh;background:var(--bg);padding-bottom:32px}
+.container{max-width:560px;margin:0 auto;padding:0 16px}
+.header{display:flex;align-items:center;justify-content:space-between;padding:16px 0 12px}
+.header-left{display:flex;align-items:center;gap:10px}
+.header-logo{width:28px;height:28px}
+.header-title{font-size:16px;font-weight:600}
+.header-date{font-size:13px;color:var(--text-secondary)}
+.refresh-btn,.date-nav-btn{width:44px;height:44px;display:flex;align-items:center;justify-content:center;border:none;background:transparent;border-radius:var(--radius-sm);cursor:pointer;color:var(--text-secondary)}
+.date-nav{display:flex;align-items:center;justify-content:center;gap:16px;padding:8px 0 16px}
+.date-nav-btn{border:1px solid var(--border);background:var(--card)}
+.date-nav-label{font-size:15px;font-weight:500;min-width:140px;text-align:center}
+.date-nav-sublabel{font-size:12px;color:var(--text-muted)}
+.status-banner{border-radius:var(--radius-lg);padding:18px 20px;display:flex;align-items:center;gap:14px;margin-bottom:16px}
+.status-banner.calm{background:var(--calm-bg)}
+.status-banner.slight-concern{background:var(--concern-bg)}
+.status-banner.needs-attention{background:var(--attention-bg)}
+.status-banner.no-data{background:#f0f0f0}
+.status-emoji{font-size:28px;line-height:1}
+.status-label{font-size:17px;font-weight:600}
+.status-sublabel{font-size:13px;margin-top:2px;color:var(--text-secondary)}
+.card{background:var(--card);border-radius:var(--radius-md);box-shadow:var(--shadow);padding:16px;margin-bottom:12px;border-left:3px solid transparent}
+.card.has-alert{border-left-color:var(--attention)}
+.card-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.card-header-left{display:flex;align-items:center;gap:10px}
+.card-icon{width:36px;height:36px;border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:18px}
+.card-icon.meds{background:#ede7f6;color:#7e57c2}
+.card-icon.activity{background:#e8f5e9;color:#66bb6a}
+.card-icon.safety{background:#e3f2fd;color:#42a5f5}
+.card-icon.sleep{background:var(--sleep-bg);color:var(--sleep-text)}
+.card-title{font-size:15px;font-weight:600}
+.badge{display:inline-flex;align-items:center;padding:3px 10px;border-radius:100px;font-size:12px;font-weight:600;letter-spacing:.02em;text-transform:uppercase}
+.badge-ok,.badge-normal{background:var(--calm-bg);color:var(--calm-text)}
+.badge-pending,.badge-warning{background:var(--concern-bg);color:var(--concern-text)}
+.badge-alert,.badge-attention,.badge-low,.badge-unusual{background:var(--attention-bg);color:var(--attention-text)}
+.badge-sleep{background:var(--sleep-bg);color:var(--sleep-text)}
+.card-summary{font-size:14px;color:var(--text-secondary);line-height:1.5;margin-bottom:12px}
+.card-stats{display:flex;gap:10px;flex-wrap:wrap}
+.stat{display:flex;align-items:center;gap:6px;font-size:13px;color:var(--text-secondary);background:#f8f7f4;padding:6px 10px;border-radius:var(--radius-sm)}
+.stat-value{font-weight:600;color:var(--text-primary)}
+.meds-indicators{display:flex;gap:12px;margin-bottom:12px}
+.med-slot{display:flex;align-items:center;gap:6px;font-size:13px;color:var(--text-secondary)}
+.med-check{width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.med-check.taken{background:var(--calm);color:white}
+.med-check.pending{background:var(--concern-bg);border:2px solid var(--concern);color:var(--concern)}
+.med-check.missed{background:var(--attention-bg);border:2px solid var(--attention);color:var(--attention)}
+.trend-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}
+.mini-panel{padding:12px;border-radius:12px;background:#f8f7f4}
+.mini-label{font-size:12px;color:var(--text-muted);margin-bottom:4px}
+.mini-value{font-size:15px;font-weight:600}
+.mini-sub{font-size:12px;color:var(--text-secondary);margin-top:4px}
+.sleep-vitals{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px}
+.vital-box{background:#f0f4ff;border-radius:var(--radius-sm);padding:10px 12px;text-align:center;transition:background .3s}
+.vital-box.vok{background:var(--calm-bg)}
+.vital-box.vwarn{background:var(--concern-bg)}
+.vital-box.valert{background:var(--attention-bg)}
+.vital-label{font-size:11px;color:var(--text-muted);margin-bottom:2px}
+.vital-value{font-size:22px;font-weight:700;color:var(--text-primary)}
+.vital-unit{font-size:11px;color:var(--text-secondary)}
+.vital-badge{font-size:11px;font-weight:600;margin-top:3px;padding:1px 6px;border-radius:20px;display:inline-block}
+.vital-badge.vok{background:var(--calm-bg);color:var(--calm-text)}
+.vital-badge.vwarn{background:var(--concern-bg);color:var(--concern-text)}
+.vital-badge.valert{background:var(--attention-bg);color:var(--attention-text)}
+.sleep-live{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--calm-text);margin-bottom:8px;font-weight:500}
+.sleep-live-dot{width:8px;height:8px;border-radius:50%;background:var(--calm);flex-shrink:0;animation:pulse 2s infinite}
+.sleep-token-hint{font-size:12px;color:var(--text-muted);text-align:center;padding:8px;background:#f8f7f4;border-radius:var(--radius-sm);margin-bottom:8px}
+.timeline-section{margin-top:8px}
+.timeline-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.timeline-title{font-size:15px;font-weight:600}
+.timeline-toggle{font-size:13px;font-weight:500;color:var(--calm-text);background:var(--calm-bg);border:none;padding:6px 14px;border-radius:100px;cursor:pointer;min-height:44px}
+.timeline-list{list-style:none}
+.timeline-item{display:flex;align-items:flex-start;gap:12px;padding:10px 0;position:relative}
+.timeline-item:not(:last-child){border-bottom:1px solid #f0ede8}
+.timeline-dot{width:10px;height:10px;border-radius:50%;margin-top:6px;flex-shrink:0}
+.timeline-dot.motion{background:var(--dot-motion)}
+.timeline-dot.medication{background:var(--dot-medication)}
+.timeline-dot.alert{background:var(--dot-alert)}
+.timeline-dot.door,.timeline-dot.dooropen,.timeline-dot.doorclose{background:var(--dot-door)}
+.timeline-dot.bed{background:var(--dot-bed)}
+.timeline-time{font-size:13px;font-weight:600;color:var(--text-primary);min-width:44px;padding-top:1px}
+.timeline-event{font-size:14px;color:var(--text-secondary);line-height:1.4;flex:1}
+.timeline-empty{text-align:center;padding:24px 16px;color:var(--text-muted);font-size:14px}
+.timeline-item.alert-item{background:var(--attention-bg);border-radius:var(--radius-sm);padding:10px 12px;margin-bottom:4px;border-bottom:none}
+.debug-panel{background:#1e1e1e;color:#0f0;font-family:monospace;font-size:11px;padding:12px;border-radius:var(--radius-sm);margin-top:16px;white-space:pre-wrap;display:none}
+.hidden{display:none!important}
+.skeleton{background:linear-gradient(90deg,#e8e5df 25%,#f0ede8 50%,#e8e5df 75%);background-size:200% 100%;animation:shimmer 1.5s ease-in-out infinite;border-radius:var(--radius-sm)}
+.skeleton-banner{height:72px;border-radius:var(--radius-lg);margin-bottom:16px}
+.skeleton-card{height:140px;border-radius:var(--radius-md);margin-bottom:12px}
+.error-state{text-align:center;padding:48px 24px}
+.error-title{font-size:16px;font-weight:600;color:var(--text-primary);margin-bottom:6px}
+.error-message{font-size:14px;color:var(--text-secondary);margin-bottom:20px}
+.error-btn{display:inline-flex;align-items:center;gap:6px;padding:10px 20px;border:none;background:var(--calm);color:white;font-size:14px;font-weight:500;border-radius:var(--radius-sm);cursor:pointer;min-height:44px}
+@keyframes shimmer{0%{background-position:-200% 0}100%{background-position:200% 0}}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+</style>
 </head>
 <body>
-  <div class="container">
-    <header class="header">
-      <div class="header-left">
-        <svg class="header-logo" viewBox="0 0 28 28" fill="none" aria-label="Peace of Mind logo"><circle cx="14" cy="14" r="13" stroke="#7BAE7F" stroke-width="1.5" fill="#EDF5EE"/><path d="M14 7C11 7 8.5 9.2 8.5 12.5c0 4.5 5.5 9 5.5 9s5.5-4.5 5.5-9C19.5 9.2 17 7 14 7z" fill="#7BAE7F" opacity="0.7"/></svg>
-        <div>
-          <div class="header-title">Peace of Mind Panel Premium</div>
-          <div class="header-date" id="headerDate"></div>
+<div class="container">
+  <header class="header">
+    <div class="header-left">
+      <svg class="header-logo" viewBox="0 0 28 28" fill="none" aria-label="Peace of Mind logo">
+        <circle cx="14" cy="14" r="13" stroke="#7BAE7F" stroke-width="1.5" fill="#EDF5EE"/>
+        <path d="M14 7C11 7 8.5 9.2 8.5 12.5c0 4.5 5.5 9 5.5 9s5.5-4.5 5.5-9C19.5 9.2 17 7 14 7z" fill="#7BAE7F" opacity="0.7"/>
+      </svg>
+      <div class="header-title">Peace of Mind Panel Premium</div>
+    </div>
+    <div class="header-date" id="headerDate"></div>
+    <button class="refresh-btn" id="refreshBtn" aria-label="Refresh">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M1 4v6h6"/><path d="M23 20v-6h-6"/>
+        <path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 0 1 3.51 15"/>
+      </svg>
+    </button>
+  </header>
+  <nav class="date-nav">
+    <button class="date-nav-btn" id="prevDay" aria-label="Previous day">&#8592;</button>
+    <div>
+      <div class="date-nav-label" id="dateLabel"></div>
+      <div class="date-nav-sublabel" id="dateSublabel"></div>
+    </div>
+    <button class="date-nav-btn" id="nextDay" aria-label="Next day">&#8594;</button>
+  </nav>
+  <main id="mainContent">
+    <div id="skeleton">
+      <div class="skeleton skeleton-banner"></div>
+      <div class="skeleton skeleton-card"></div>
+      <div class="skeleton skeleton-card"></div>
+      <div class="skeleton skeleton-card"></div>
+    </div>
+    <div id="errorState" class="hidden">
+      <div class="error-state">
+        <div class="error-title">Could not load data</div>
+        <div class="error-message" id="errorMsg">We couldn&#x27;t reach the server right now. Please check your connection and try again.</div>
+        <button class="error-btn" id="retryBtn">&#8635; Try again</button>
+      </div>
+    </div>
+    <div id="dataView" class="hidden">
+      <div id="statusBanner" class="status-banner"></div>
+      <div id="medsCard" class="card">
+        <div class="card-header">
+          <div class="card-header-left">
+            <div class="card-icon meds">&#128138;</div>
+            <div class="card-title">Medications</div>
+          </div>
+          <span id="medsBadge" class="badge"></span>
+        </div>
+        <div id="medsIndicators" class="meds-indicators"></div>
+        <div id="medsSummary" class="card-summary"></div>
+      </div>
+      <div id="activityCard" class="card">
+        <div class="card-header">
+          <div class="card-header-left">
+            <div class="card-icon activity">&#128694;</div>
+            <div class="card-title">Activity</div>
+          </div>
+          <span id="activityBadge" class="badge"></span>
+        </div>
+        <div id="activitySummary" class="card-summary"></div>
+        <div id="activityStats" class="card-stats"></div>
+      </div>
+      <div id="sleepCard" class="card">
+        <div class="card-header">
+          <div class="card-header-left">
+            <div class="card-icon sleep">&#128564;</div>
+            <div class="card-title">Sleep</div>
+          </div>
+          <span id="sleepBadge" class="badge badge-sleep">Sleep</span>
+        </div>
+        <div id="sleepLive" class="sleep-live hidden">
+          <div class="sleep-live-dot"></div><span>Live monitoring active</span>
+        </div>
+        <div id="sleepTokenHint" class="sleep-token-hint hidden">&#128274; Add HA_TOKEN to see live vitals</div>
+        <div id="sleepVitals" class="sleep-vitals">
+          <div id="vboxBreathing" class="vital-box">
+            <div class="vital-label">Breathing</div>
+            <div class="vital-value" id="vBreathing">--</div>
+            <div class="vital-unit">breaths/min</div>
+            <div id="vBreathingBadge" class="vital-badge">--</div>
+          </div>
+          <div id="vboxHeart" class="vital-box">
+            <div class="vital-label">Heart Rate</div>
+            <div class="vital-value" id="vHeart">--</div>
+            <div class="vital-unit">bpm</div>
+            <div id="vHeartBadge" class="vital-badge">--</div>
+          </div>
+          <div id="vboxPresence" class="vital-box">
+            <div class="vital-label">In Bed</div>
+            <div class="vital-value" id="vPresence">--</div>
+            <div class="vital-unit">&nbsp;</div>
+            <div id="vPresenceBadge" class="vital-badge">--</div>
+          </div>
+          <div id="vboxLight" class="vital-box">
+            <div class="vital-label">Light Level</div>
+            <div class="vital-value" id="vLight">--</div>
+            <div class="vital-unit">lux</div>
+            <div id="vLightBadge" class="vital-badge">--</div>
+          </div>
+        </div>
+        <div id="sleepSummary" class="card-summary"></div>
+        <div id="sleepStats" class="card-stats"></div>
+      </div>
+      <div id="safetyCard" class="card">
+        <div class="card-header">
+          <div class="card-header-left">
+            <div class="card-icon safety">&#128737;</div>
+            <div class="card-title">Safety</div>
+          </div>
+          <span id="safetyBadge" class="badge"></span>
+        </div>
+        <div id="safetySummary" class="card-summary"></div>
+        <div id="safetyStats" class="card-stats"></div>
+      </div>
+      <div class="trend-row">
+        <div class="mini-panel">
+          <div class="mini-label">Day trend</div>
+          <div class="mini-value" id="trendValue"></div>
+          <div class="mini-sub" id="trendSub">Compared with baseline</div>
+        </div>
+        <div class="mini-panel">
+          <div class="mini-label">Baseline</div>
+          <div class="mini-value" id="baselineValue"></div>
+          <div class="mini-sub" id="baselineSub">7-day averages</div>
         </div>
       </div>
-      <button class="refresh-btn" id="refreshBtn" aria-label="Refresh data">↻</button>
-    </header>
-
-    <nav class="date-nav">
-      <button class="date-nav-btn" id="prevDay" aria-label="Previous day">‹</button>
-      <div>
-        <div class="date-nav-label" id="dateLabel"></div>
-        <div class="date-nav-sublabel" id="dateSublabel"></div>
+      <div class="timeline-section">
+        <div class="timeline-header">
+          <div class="timeline-title" id="timelineTitle">Today&#x27;s Timeline</div>
+          <button class="timeline-toggle" id="timelineToggle">Show all</button>
+        </div>
+        <ul class="timeline-list" id="timelineList"></ul>
       </div>
-      <button class="date-nav-btn" id="nextDay" aria-label="Next day">›</button>
-    </nav>
-
-    <main id="mainContent">
-      <div id="skeleton">
-        <div class="skeleton skeleton-banner"></div>
-        <div class="skeleton skeleton-card"></div>
-        <div class="skeleton skeleton-card"></div>
-        <div class="skeleton skeleton-card"></div>
-      </div>
-
-      <div id="errorState" class="hidden">
-        <div class="error-state">
-          <div class="error-title">Could not load data</div>
-          <div class="error-message">We couldn't reach the server right now. Please check your connection and try again.</div>
-          <button class="error-btn" id="retryBtn">Try again</button>
-        </div>
-      </div>
-
-      <div id="dataView" class="hidden">
-        <div id="statusBanner" class="status-banner"></div>
-
-        <div id="medsCard" class="card">
-          <div class="card-header">
-            <div class="card-header-left">
-              <div class="card-icon meds">💊</div>
-              <div class="card-title">Medications</div>
-            </div>
-            <span id="medsBadge" class="badge"></span>
-          </div>
-          <div id="medsIndicators" class="meds-indicators"></div>
-          <div id="medsSummary" class="card-summary"></div>
-        </div>
-
-        <div id="activityCard" class="card">
-          <div class="card-header">
-            <div class="card-header-left">
-              <div class="card-icon activity">🏃</div>
-              <div class="card-title">Activity</div>
-            </div>
-            <span id="activityBadge" class="badge"></span>
-          </div>
-          <div id="activitySummary" class="card-summary"></div>
-          <div id="activityStats" class="card-stats"></div>
-        </div>
-
-        <div id="sleepCard" class="card">
-          <div class="card-header">
-            <div class="card-header-left">
-              <div class="card-icon sleep">🌙</div>
-              <div class="card-title">Sleep</div>
-            </div>
-            <span id="sleepBadge" class="badge badge-sleep">Sleep</span>
-          </div>
-          <div id="sleepSummary" class="card-summary"></div>
-          <div id="sleepStats" class="card-stats"></div>
-        </div>
-
-        <div id="safetyCard" class="card">
-          <div class="card-header">
-            <div class="card-header-left">
-              <div class="card-icon safety">🛡️</div>
-              <div class="card-title">Safety</div>
-            </div>
-            <span id="safetyBadge" class="badge"></span>
-          </div>
-          <div id="safetySummary" class="card-summary"></div>
-          <div id="safetyStats" class="card-stats"></div>
-        </div>
-
-        <div class="trend-row">
-          <div class="mini-panel">
-            <div class="mini-label">Day trend</div>
-            <div class="mini-value" id="trendValue">—</div>
-            <div class="mini-sub" id="trendSub">Compared with baseline</div>
-          </div>
-          <div class="mini-panel">
-            <div class="mini-label">Baseline</div>
-            <div class="mini-value" id="baselineValue">—</div>
-            <div class="mini-sub" id="baselineSub">7-day averages</div>
-          </div>
-        </div>
-
-        <div class="timeline-section">
-          <div class="timeline-header">
-            <div class="timeline-title" id="timelineTitle">Today's Timeline</div>
-            <button class="timeline-toggle" id="timelineToggle">Show all</button>
-          </div>
-          <ul class="timeline-list" id="timelineList"></ul>
-        </div>
-      </div>
-    </main>
-  </div>
-
+      <div class="debug-panel" id="debugPanel"></div>
+    </div>
+  </main>
+</div>
 <script>
-(function(){try{if(window.Telegram&&Telegram.WebApp){Telegram.WebApp.ready();Telegram.WebApp.expand();}}catch(e){}})();
-const API_BASE='https://n8n.srv1161536.hstgr.cloud/webhook/daily-summary';
-let currentDate=new Date(); let timelineExpanded=false; let currentData=null; let refreshTimer=null;
-const $=id=>document.getElementById(id);
-const formatDateISO=d=>`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
-const formatDateDisplay=d=>d.toLocaleDateString('en-GB',{month:'long',day:'numeric',year:'numeric'});
-const formatDateShort=d=>d.toLocaleDateString('en-GB',{weekday:'long'});
-const isToday=d=>{const n=new Date();return d.getFullYear()===n.getFullYear()&&d.getMonth()===n.getMonth()&&d.getDate()===n.getDate();};
-const isYesterday=d=>{const y=new Date();y.setDate(y.getDate()-1);return d.getFullYear()===y.getFullYear()&&d.getMonth()===y.getMonth()&&d.getDate()===y.getDate();};
-function formatTime(v){ if(!v) return '—'; try{return new Date(v).toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});}catch(e){return '—';}}
-function escapeHtml(str){const div=document.createElement('div');div.textContent=str||'';return div.innerHTML;}
-function updateDateDisplay(){ const iso=formatDateISO(currentDate); $('headerDate').textContent=iso; if(isToday(currentDate)){ $('dateLabel').textContent='Today'; $('dateSublabel').textContent=formatDateDisplay(currentDate); $('timelineTitle').textContent="Today's Timeline"; } else if(isYesterday(currentDate)){ $('dateLabel').textContent='Yesterday'; $('dateSublabel').textContent=formatDateDisplay(currentDate); $('timelineTitle').textContent="Yesterday's Timeline"; } else { $('dateLabel').textContent=formatDateDisplay(currentDate); $('dateSublabel').textContent=formatDateShort(currentDate); $('timelineTitle').textContent='Timeline'; } $('nextDay').disabled=isToday(currentDate); }
-const STATUS_MAP={ calm:{emoji:'🙂',label:'All is well today',sub:'Everything looks good'}, needs_attention:{emoji:'⚠️',label:'Needs your attention',sub:'Please review the details below'}, slight_concern:{emoji:'🟡',label:'Minor things to note',sub:'Some items need attention'}, no_data:{emoji:'🕊️',label:'No data available yet',sub:'Waiting for sensor updates'} };
-function renderBadge(el,status){ const s=(status||'').toUpperCase(); let cls='badge-ok', label=s||'OK'; if(['OK','NORMAL'].includes(s)){cls='badge-ok'; label=s==='NORMAL'?'Normal':'OK';} else if(['PENDING','WARNING'].includes(s)){cls='badge-pending'; label=s==='WARNING'?'Warning':'Pending';} else if(['ALERT','ATTENTION','LOW','UNUSUAL'].includes(s)){cls='badge-alert'; label=s;} el.className='badge '+cls; el.textContent=label; }
-function renderMedSlot(label,status){ let cls='pending', icon='•'; if(status==='taken'){cls='taken';icon='✓';} else if(status==='missed'||status==='skipped'){cls='missed';icon='✕';} return `<div class="med-slot"><div class="med-check ${cls}">${icon}</div><span>${label}</span></div>`; }
-function stat(label,value){ return `<div class="stat"><span>${escapeHtml(label)}</span><span class="stat-value">${escapeHtml(String(value))}</span></div>`; }
-function formatDurationHours(hours){ if(hours==null || isNaN(hours)) return '—'; return `${Number(hours).toFixed(1)}h`; }
-function computeSleepSummary(data){ const sleep=data.sleep||{}; if(sleep.in_bed===true) return 'Currently in bed.'; if(sleep.total_in_bed_hours) return `Time in bed today: ${formatDurationHours(sleep.total_in_bed_hours)}.`; if((sleep.events_count||0)>0) return `Bed-related events today: ${sleep.events_count}.`; return 'No sleep / bed data recorded yet.'; }
-function computeTrend(data){ const stats=data.stats||{}; const baseline=data.baseline||{}; const total=Number(stats.total_motion||0); const avg=Number(baseline.avg_motion_events||0); if(!avg) return {label:'No baseline yet', sub:'Waiting for 7-day average'}; const ratio=total/avg; if(ratio<0.5) return {label:'Below usual', sub:`${total} today vs ${avg} baseline motions`}; if(ratio>1.5) return {label:'Above usual', sub:`${total} today vs ${avg} baseline motions`}; return {label:'Near baseline', sub:`${total} today vs ${avg} baseline motions`}; }
-function renderTimeline(events,alerts){ const list=$('timelineList'); const toggle=$('timelineToggle'); let all=[]; (events||[]).forEach(e=>all.push({time:e.time,event:e.event,type:e.type||'motion',isAlert:false})); (alerts||[]).forEach(a=>all.push({time:a.time,event:a.message,type:'alert',isAlert:true})); all.sort((a,b)=>new Date(a.time||0)-new Date(b.time||0)); if(!all.length){ list.innerHTML=`<li class="timeline-empty">${isToday(currentDate)?'No events recorded yet today.':'No events recorded for this day.'}</li>`; toggle.classList.add('hidden'); return; } const items=timelineExpanded?all:all.slice(-5); list.innerHTML=items.map(item=>`<li class="timeline-item ${item.isAlert?'alert-item':''}"><div class="timeline-dot ${item.isAlert?'alert':(item.type==='bed'?'bed':item.type==='dooropen'||item.type==='doorclose'?'door':item.type==='medication'?'medication':'motion')} "></div><div class="timeline-time">${formatTime(item.time)}</div><div class="timeline-event">${escapeHtml(item.event)}</div></li>`).join(''); if(all.length>5){ toggle.classList.remove('hidden'); toggle.textContent=timelineExpanded?'Show less':`Show all (${all.length})`; } else { toggle.classList.add('hidden'); } }
-function renderData(data){ currentData=data; const score=data.day_score||'no_data'; const info=STATUS_MAP[score]||STATUS_MAP.no_data; $('statusBanner').className='status-banner '+(score==='calm'?'calm':score==='needs_attention'?'needs-attention':score==='slight_concern'?'slight-concern':'no-data'); $('statusBanner').innerHTML=`<span class="status-emoji">${info.emoji}</span><div><div class="status-label">${info.label}</div><div class="status-sublabel">${info.sub}</div></div>`;
- const st=data.status||{}; const summary=data.summary_text||{}; const stats=data.stats||{}; const alerts=data.alerts||[]; const baseline=data.baseline||{}; const sleep=data.sleep||{};
- renderBadge($('medsBadge'),st.meds); $('medsSummary').textContent=summary.meds||'No medication data available.'; $('medsIndicators').innerHTML=renderMedSlot('Morning',stats.meds_morning||'pending')+renderMedSlot('Evening',stats.meds_evening||'pending'); $('medsCard').className='card '+((st.meds||'').toUpperCase()==='ALERT'?'has-alert':'');
- renderBadge($('activityBadge'),st.activity); $('activitySummary').textContent=summary.activity||'No activity data available.'; $('activityStats').innerHTML=[ stat('First motion',formatTime(stats.first_motion)), stat('Motions',stats.total_motion??0), stat('Night',stats.night_motion??0) ].join(''); $('activityCard').className='card '+(['LOW','UNUSUAL','ALERT'].includes((st.activity||'').toUpperCase())?'has-alert':'');
- $('sleepSummary').textContent=summary.sleep||computeSleepSummary(data); $('sleepStats').innerHTML=[ stat('In bed now', sleep.in_bed===true?'Yes':sleep.in_bed===false?'No':'—'), stat('Time in bed', sleep.total_in_bed_hours?formatDurationHours(sleep.total_in_bed_hours):'—'), stat('Bed events', sleep.events_count??0) ].join(''); $('sleepCard').className='card '+((sleep.in_bed===true||sleep.events_count>0)?'':'');
- renderBadge($('safetyBadge'),st.safety); $('safetySummary').textContent=summary.safety||'No safety data available.'; $('safetyStats').innerHTML=[ stat('Door events',stats.door_events_count??0), stat('Alerts',alerts.length), stat('Baseline doors',baseline.avg_door_events??'—') ].join(''); $('safetyCard').className='card '+(['ATTENTION','ALERT','WARNING'].includes((st.safety||'').toUpperCase())||alerts.length>0?'has-alert':'');
- const trend=computeTrend(data); $('trendValue').textContent=trend.label; $('trendSub').textContent=trend.sub; $('baselineValue').textContent=baseline.days_sampled?`${baseline.days_sampled} days`:'No baseline'; $('baselineSub').textContent=`Motion ${baseline.avg_motion_events??'—'} • Night ${baseline.avg_night_motion??'—'} • Doors ${baseline.avg_door_events??'—'}`;
- renderTimeline(data.timeline||[],alerts);
- $('skeleton').classList.add('hidden'); $('errorState').classList.add('hidden'); $('dataView').classList.remove('hidden'); }
-async function fetchData(showLoading=true){ if(showLoading){ $('skeleton').classList.remove('hidden'); $('errorState').classList.add('hidden'); $('dataView').classList.add('hidden'); } const url=`${API_BASE}?date=${encodeURIComponent(formatDateISO(currentDate))}`; try{ const resp=await fetch(url); if(!resp.ok) throw new Error(`HTTP ${resp.status}`); const data=await resp.json(); renderData(data); } catch(err){ console.error(err); $('skeleton').classList.add('hidden'); $('errorState').classList.remove('hidden'); $('dataView').classList.add('hidden'); } }
-$('prevDay').addEventListener('click',()=>{ currentDate.setDate(currentDate.getDate()-1); timelineExpanded=false; updateDateDisplay(); fetchData(true); });
-$('nextDay').addEventListener('click',()=>{ if(!isToday(currentDate)){ currentDate.setDate(currentDate.getDate()+1); timelineExpanded=false; updateDateDisplay(); fetchData(true); } });
-$('refreshBtn').addEventListener('click',()=>fetchData(false)); $('retryBtn').addEventListener('click',()=>fetchData(true)); $('timelineToggle').addEventListener('click',()=>{ timelineExpanded=!timelineExpanded; if(currentData) renderTimeline(currentData.timeline||[],currentData.alerts||[]); });
-function startAutoRefresh(){ if(refreshTimer) clearInterval(refreshTimer); refreshTimer=setInterval(()=>{ if(isToday(currentDate)) fetchData(false); },5*60*1000); }
-updateDateDisplay(); fetchData(true); startAutoRefresh();
+(function(){
+try{if(window.Telegram)Telegram.WebApp.ready(),Telegram.WebApp.expand();}catch(e){}
+
+var API_BASE = 'https://n8n.srv1161536.hstgr.cloud/webhook/daily-summary';
+var HA_BASE  = 'https://ha.seniorslearnai.co.uk';
+var HA_TOKEN = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiI1MjJiZTZiYmE3MjA0ZWZiYmY2OGI0MTYwYjViYWFiNyIsImlhdCI6MTc3Nzc0MTY5NiwiZXhwIjoyMDkzMTAxNjk2fQ.uEBaIEK4w2fFE3MR6fXiHDBgjdrRcbnIALcl6XUIMro';
+
+var SLEEP_ENT={
+  breathing:'sensor.bedroom_breathing_sensor_czestotliwosc_oddechu',
+  heartRate:'sensor.bedroom_breathing_sensor_tetno',
+  presence:'binary_sensor.bedroom_breathing_sensor_obecnosc_osoby',
+  light:'sensor.bedroom_breathing_sensor_natezenie_swiatla'
+};
+
+var currentDate=new Date(),timelineExpanded=false,currentData=null,refreshTimer=null,sleepTimer=null;
+function $(i){return document.getElementById(i);}
+function esc(s){var d=document.createElement('div');d.textContent=String(s||'');return d.innerHTML;}
+function fDate(d){return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate());}
+function pad(n){return String(n).padStart(2,'0');}
+function fDisp(d){return d.toLocaleDateString('en-GB',{month:'long',day:'numeric',year:'numeric'});}
+function fShort(d){return d.toLocaleDateString('en-GB',{weekday:'long'});}
+function isToday(d){var n=new Date();return d.getFullYear()===n.getFullYear()&&d.getMonth()===n.getMonth()&&d.getDate()===n.getDate();}
+function isYest(d){var y=new Date();y.setDate(y.getDate()-1);return d.getFullYear()===y.getFullYear()&&d.getMonth()===y.getMonth()&&d.getDate()===y.getDate();}
+function fTime(v){if(!v)return'';try{return new Date(v).toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});}catch(e){return'';}}
+function fHours(h){if(h==null||isNaN(h))return'';return Number(h).toFixed(1)+'h';}
+
+var STATUS_MAP={
+  'calm':{emoji:'😊',label:'All is well today',sub:'Everything looks good'},
+  'needs-attention':{emoji:'⚠️',label:'Needs your attention',sub:'Please review the details below'},
+  'slight-concern':{emoji:'🔔',label:'Minor things to note',sub:'Some items need attention'},
+  'no-data':{emoji:'⏳',label:'No data available yet',sub:'Waiting for sensor updates'}
+};
+
+function updateDateDisplay(){
+  $('headerDate').textContent=fDate(currentDate);
+  if(isToday(currentDate)){$('dateLabel').textContent='Today';$('dateSublabel').textContent=fDisp(currentDate);$('timelineTitle').textContent="Today's Timeline";}
+  else if(isYest(currentDate)){$('dateLabel').textContent='Yesterday';$('dateSublabel').textContent=fDisp(currentDate);$('timelineTitle').textContent="Yesterday's Timeline";}
+  else{$('dateLabel').textContent=fDisp(currentDate);$('dateSublabel').textContent=fShort(currentDate);$('timelineTitle').textContent='Timeline';}
+  $('nextDay').disabled=isToday(currentDate);
+}
+
+function renderBadge(el,status){
+  var s=(status||'').toUpperCase();
+  var cls='badge-ok',label='OK';
+  if(['OK','NORMAL'].includes(s)){cls='badge-ok';label=s==='NORMAL'?'Normal':'OK';}
+  else if(['PENDING','WARNING'].includes(s)){cls='badge-pending';label=s==='WARNING'?'Warning':'Pending';}
+  else if(['ALERT','ATTENTION','LOW','UNUSUAL'].includes(s)){cls='badge-alert';label=s;}
+  el.className='badge '+cls;el.textContent=label;
+}
+function medSlot(label,status){
+  var cls='pending',icon='○';
+  if(status==='taken'){cls='taken';icon='✓';}
+  else if(['missed','skipped'].includes(status)){cls='missed';icon='✗';}
+  return '<div class="med-slot"><div class="med-check '+cls+'">'+icon+'</div><span>'+esc(label)+'</span></div>';
+}
+function statEl(label,value){return '<div class="stat"><span>'+esc(label)+'</span><span class="stat-value">'+esc(String(value))+'</span></div>';}
+
+function vitalState(value,okMin,okMax,warnMin,warnMax){
+  var v=parseFloat(value);if(isNaN(v))return null;
+  if(v<warnMin||v>warnMax)return'valert';
+  if(v<okMin||v>okMax)return'vwarn';
+  return'vok';
+}
+function setVital(boxId,valId,badgeId,rawVal,label,state){
+  var box=$(boxId);box.className='vital-box '+(state||'');
+  $(valId).textContent=rawVal!=null?rawVal:'--';
+  var b=$(badgeId);b.className='vital-badge '+(state||'');b.textContent=label||'--';
+}
+async function fetchHA(entity){
+  if(!HA_TOKEN)return null;
+  try{
+    var r=await fetch(HA_BASE+'/api/states/'+entity,{headers:{Authorization:'Bearer '+HA_TOKEN,'Content-Type':'application/json'}});
+    if(!r.ok)return null;
+    var d=await r.json();return d.state;
+  }catch(e){return null;}
+}
+async function updateSleepVitals(){
+  if(!isToday(currentDate))return;
+  if(!HA_TOKEN){$('sleepTokenHint').classList.remove('hidden');$('sleepVitals').classList.add('hidden');return;}
+  $('sleepTokenHint').classList.add('hidden');$('sleepVitals').classList.remove('hidden');
+  var results=await Promise.all([fetchHA(SLEEP_ENT.breathing),fetchHA(SLEEP_ENT.heartRate),fetchHA(SLEEP_ENT.presence),fetchHA(SLEEP_ENT.light)]);
+  var br=results[0],hr=results[1],pr=results[2],lx=results[3];
+  var brV=parseFloat(br),brS=vitalState(br,12,20,8,25);
+  setVital('vboxBreathing','vBreathing','vBreathingBadge',isNaN(brV)?'--':brV.toFixed(0),brS==='vok'?'Normal':brS==='vwarn'?'Monitor':'⚠ Check',brS||'');
+  var hrV=parseFloat(hr),hrS=vitalState(hr,50,100,45,110);
+  setVital('vboxHeart','vHeart','vHeartBadge',isNaN(hrV)?'--':hrV.toFixed(0),hrS==='vok'?'Normal':hrS==='vwarn'?'Monitor':'⚠ Check',hrS||'');
+  var inBed=(pr==='on');
+  setVital('vboxPresence','vPresence','vPresenceBadge',inBed?'Yes':'No',inBed?'In bed':'Not in bed',inBed?'vok':'');
+  $('sleepLive').classList.toggle('hidden',!inBed);
+  var lxV=parseFloat(lx),lxS=(!isNaN(lxV)&&lxV>50)?'valert':(!isNaN(lxV)&&lxV>10)?'vwarn':'vok';
+  setVital('vboxLight','vLight','vLightBadge',isNaN(lxV)?'--':lxV.toFixed(0),(!isNaN(lxV)&&lxV>50)?'Light on':(!isNaN(lxV)&&lxV>10)?'Dim light':'Dark',lxS);
+}
+
+function computeTrend(data){
+  var stats=data.stats||{},bl=data.baseline||{};
+  var total=Number(stats.totalmotion||0),avg=Number(bl.avgmotionevents||0);
+  if(!avg)return{label:'No baseline yet',sub:'Waiting for 7-day average'};
+  var r=total/avg;
+  if(r<0.5)return{label:'Below usual',sub:total+' today vs '+avg+' baseline motions'};
+  if(r>1.5)return{label:'Above usual',sub:total+' today vs '+avg+' baseline motions'};
+  return{label:'Near baseline',sub:total+' today vs '+avg+' baseline motions'};
+}
+
+function renderTimeline(events,alerts){
+  var list=$('timelineList'),toggle=$('timelineToggle');
+  var all=[];
+  (events||[]).forEach(function(e){all.push({time:e.time,event:e.event,type:e.type||'motion',isAlert:false});});
+  (alerts||[]).forEach(function(a){all.push({time:a.time,event:a.message,type:'alert',isAlert:true});});
+  all.sort(function(a,b){return new Date(b.time||0)-new Date(a.time||0);});
+  if(!all.length){list.innerHTML='<li class="timeline-empty">'+(isToday(currentDate)?'No events recorded yet today.':'No events recorded for this day.')+'</li>';toggle.classList.add('hidden');return;}
+  var items=timelineExpanded?all:all.slice(0,5);
+  var dotClass=function(item){if(item.isAlert)return'alert';var t=item.type;if(t==='bed')return'bed';if(t==='medication')return'medication';if(t&&t.startsWith('door'))return'door';return'motion';};
+  list.innerHTML=items.map(function(item){return'<li class="timeline-item'+(item.isAlert?' alert-item':'')+'"><div class="timeline-dot '+dotClass(item)+'"></div><div class="timeline-time">'+fTime(item.time)+'</div><div class="timeline-event">'+esc(item.event)+'</div></li>';}).join('');
+  if(all.length>5){toggle.classList.remove('hidden');toggle.textContent=timelineExpanded?'Show less':'Show all ('+all.length+')';}
+  else toggle.classList.add('hidden');
+}
+
+function renderData(data){
+  currentData=data;
+  $('debugPanel').textContent='API response:
+'+JSON.stringify(data,null,2);
+  var score=data.dayscore||'no-data';
+  if(score==='needsattention')score='needs-attention';
+  if(score==='slightconcern')score='slight-concern';
+  if(score==='nodata')score='no-data';
+  var info=STATUS_MAP[score]||STATUS_MAP['no-data'];
+  $('statusBanner').className='status-banner '+score;
+  $('statusBanner').innerHTML='<span class="status-emoji">'+info.emoji+'</span><div><div class="status-label">'+esc(info.label)+'</div><div class="status-sublabel">'+esc(info.sub)+'</div></div>';
+  var st=data.status||{},summary=data.summarytext||data.summary||{},stats=data.stats||{},alerts=data.alerts||[],baseline=data.baseline||{},sleep=data.sleep||{},timeline=data.timeline||[];
+  renderBadge($('medsBadge'),st.meds);
+  $('medsSummary').textContent=(typeof summary==='string'?summary:summary.meds)||'No medication data available.';
+  $('medsIndicators').innerHTML=medSlot('Morning',stats.medsmorning||'pending')+medSlot('Evening',stats.medsevening||'pending');
+  $('medsCard').className='card'+((st.meds||'').toUpperCase()==='ALERT'?' has-alert':'');
+  renderBadge($('activityBadge'),st.activity);
+  $('activitySummary').textContent=(typeof summary==='object'?summary.activity:'')||'No activity data available.';
+  $('activityStats').innerHTML=[statEl('First motion',fTime(stats.firstmotion)||'--'),statEl('Motions',stats.totalmotion!=null?stats.totalmotion:0),statEl('Night',stats.nightmotion!=null?stats.nightmotion:0)].join('');
+  $('activityCard').className='card'+(['LOW','UNUSUAL','ALERT'].indexOf((st.activity||'').toUpperCase())>-1?' has-alert':'');
+  $('sleepSummary').textContent=(typeof summary==='object'?summary.sleep:'')||(sleep.inbed===true?'Currently in bed.':sleep.totalinbedhours?'Time in bed today: '+fHours(sleep.totalinbedhours)+'.':sleep.eventscount>0?'Bed-related events today: '+sleep.eventscount+'.':'No sleep/bed data recorded yet.');
+  $('sleepStats').innerHTML=[statEl('In bed now',sleep.inbed===true?'Yes':sleep.inbed===false?'No':'?'),statEl('Time in bed',sleep.totalinbedhours?fHours(sleep.totalinbedhours):'?'),statEl('Bed events',sleep.eventscount!=null?sleep.eventscount:0)].join('');
+  $('sleepCard').className='card';
+  renderBadge($('safetyBadge'),st.safety);
+  $('safetySummary').textContent=(typeof summary==='object'?summary.safety:'')||'No safety data available.';
+  $('safetyStats').innerHTML=[statEl('Door events',stats.dooreventscount!=null?stats.dooreventscount:0),statEl('Alerts',alerts.length),statEl('Baseline doors',baseline.avgdoorevents!=null?baseline.avgdoorevents:'--')].join('');
+  $('safetyCard').className='card'+(['ATTENTION','ALERT','WARNING'].indexOf((st.safety||'').toUpperCase())>-1||alerts.length>0?' has-alert':'');
+  var trend=computeTrend(data);
+  $('trendValue').textContent=trend.label;$('trendSub').textContent=trend.sub;
+  $('baselineValue').textContent=baseline.dayssampled?baseline.dayssampled+' days':'No baseline';
+  $('baselineSub').textContent='Motion: '+(baseline.avgmotionevents||'--')+' · Night: '+(baseline.avgnightmotion||'--')+' · Doors: '+(baseline.avgdoorevents||'--');
+  renderTimeline(timeline,alerts);
+  $('skeleton').classList.add('hidden');$('errorState').classList.add('hidden');$('dataView').classList.remove('hidden');
+  updateSleepVitals();
+}
+
+async function fetchData(showLoading){
+  if(showLoading===undefined)showLoading=true;
+  if(showLoading){$('skeleton').classList.remove('hidden');$('errorState').classList.add('hidden');$('dataView').classList.add('hidden');}
+  var url=API_BASE+'?date='+encodeURIComponent(fDate(currentDate));
+  try{
+    var resp=await fetch(url);
+    if(!resp.ok)throw new Error('HTTP '+resp.status);
+    var data=await resp.json();
+    if(Array.isArray(data))data=data[0];
+    renderData(data);
+  }catch(err){
+    console.error('Fetch error:',err);
+    $('skeleton').classList.add('hidden');
+    $('errorMsg').textContent='Could not load data: '+err.message+'. URL: '+url;
+    $('errorState').classList.remove('hidden');$('dataView').classList.add('hidden');
+  }
+}
+
+$('prevDay').addEventListener('click',function(){currentDate.setDate(currentDate.getDate()-1);timelineExpanded=false;updateDateDisplay();fetchData(true);});
+$('nextDay').addEventListener('click',function(){if(!isToday(currentDate)){currentDate.setDate(currentDate.getDate()+1);timelineExpanded=false;updateDateDisplay();fetchData(true);}});
+$('refreshBtn').addEventListener('click',function(){fetchData(false);});
+$('retryBtn').addEventListener('click',function(){fetchData(true);});
+$('timelineToggle').addEventListener('click',function(){timelineExpanded=!timelineExpanded;if(currentData)renderTimeline(currentData.timeline||[],currentData.alerts||[]);});
+document.addEventListener('keydown',function(e){if(e.key==='d'||e.key==='D'){var p=$('debugPanel');p.style.display=(p.style.display==='block'?'none':'block');}});
+
+function startAutoRefresh(){
+  if(refreshTimer)clearInterval(refreshTimer);
+  refreshTimer=setInterval(function(){if(isToday(currentDate))fetchData(false);},60*1000);
+  if(sleepTimer)clearInterval(sleepTimer);
+  sleepTimer=setInterval(function(){if(isToday(currentDate))updateSleepVitals();},30*1000);
+}
+
+updateDateDisplay();fetchData(true);startAutoRefresh();
+})();
 </script>
 </body>
 </html>
