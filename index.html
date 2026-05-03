@@ -767,16 +767,26 @@ body{min-height:100vh;padding-bottom:40px;background:linear-gradient(160deg,#eef
       if(br||hr)g('liveBadge').classList.remove('hidden');
     }
 
-    // Render breathing
-    var brV=parseFloat(br), brS=vRange(br,12,20,8,25);
-    setVital('vboxBreathing','vBreathing','vBreathingBadge',isNaN(brV)?null:brV.toFixed(0),brS==='vok'?'Normal':brS==='vwarn'?'Monitor':'Check!',brS);
+    // FIX: breathing=0 means phantom detection, treat as null
+    var brV = parseFloat(br);
+    var brReal = (!isNaN(brV) && brV > 0) ? brV : null;
+    var brS = brReal !== null ? vRange(String(brReal),12,20,8,25) : '';
+    setVital('vboxBreathing','vBreathing','vBreathingBadge',
+      brReal !== null ? brReal.toFixed(0) : null,
+      brS==='vok'?'Normal':brS==='vwarn'?'Monitor':brS==='valert'?'Check!':'--', brS);
 
-    // Render heart rate
-    var hrV=parseFloat(hr), hrS=vRange(hr,50,100,45,110);
-    setVital('vboxHeart','vHeart','vHeartBadge',isNaN(hrV)?null:hrV.toFixed(0),hrS==='vok'?'Normal':hrS==='vwarn'?'Monitor':'Check!',hrS);
+    // FIX: true presence only if sensor=on AND breathing>0
+    var inBed = (pr === 'on') && (brReal !== null);
+
+    // FIX: heart rate only meaningful when truly in bed
+    var hrV = parseFloat(hr);
+    var hrReal = inBed ? hrV : null;
+    var hrS = (hrReal !== null && !isNaN(hrReal)) ? vRange(String(hrReal),50,100,45,110) : '';
+    setVital('vboxHeart','vHeart','vHeartBadge',
+      (hrReal !== null && !isNaN(hrReal)) ? hrReal.toFixed(0) : null,
+      hrS==='vok'?'Normal':hrS==='vwarn'?'Monitor':hrS==='valert'?'Check!':'--', hrS);
 
     // Render presence
-    var inBed = pr==='on';
     setVital('vboxPresence','vPresence','vPresenceBadge',inBed?'Yes':'No',inBed?'In bed':'Away',inBed?'vok':'');
     g('sleepLive').classList.toggle('hidden',!inBed);
 
