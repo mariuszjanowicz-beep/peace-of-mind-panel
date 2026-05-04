@@ -116,6 +116,8 @@ body{min-height:100vh;padding-bottom:40px;background:linear-gradient(160deg,#eef
 .med-check.taken{background:var(--calm);color:#fff}
 .med-check.pending{background:var(--concern-bg);border:2px solid var(--concern);color:var(--concern)}
 .med-check.missed{background:var(--alert-bg);border:2px solid var(--alert);color:var(--alert)}
+.med-check.skipped{background:#fff3cd;border:2px solid #e8a020;color:#7a4f10}
+.med-check.late{background:#fde8b8;border:2px solid #d47c00;color:#7a4500}
 
 /* ── NEXT MED COUNTDOWN ── */
 .next-med{display:flex;align-items:center;gap:8px;background:var(--card2);border-radius:var(--radius-xs);padding:8px 12px;font-size:12px;color:var(--text2);margin-bottom:8px}
@@ -212,6 +214,14 @@ body{min-height:100vh;padding-bottom:40px;background:linear-gradient(160deg,#eef
 .section-hdr{padding:4px 16px 8px;font-size:11px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.08em}
 
 /* ── ANIMATIONS ── */
+/* ── CHECKIN CARD ── */
+.checkin-widget{display:flex;align-items:center;gap:14px;padding:8px 0 4px}
+.checkin-emoji{font-size:36px;line-height:1;flex-shrink:0}
+.checkin-label{font-size:15px;font-weight:700;color:var(--text)}
+.checkin-sub{font-size:12px;color:var(--text3);margin-top:2px}
+/* ── SLEEP NIGHT REPORT ── */
+.sleep-night-section{margin-top:10px;border-top:1px solid var(--border);padding-top:10px}
+.sleep-night-hdr{font-size:11px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px}
 @keyframes shimmer{0%{background-position:-200% 0}100%{background-position:200% 0}}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
 @keyframes alertPulse{0%,100%{opacity:1}50%{opacity:.7}}
@@ -350,6 +360,27 @@ body{min-height:100vh;padding-bottom:40px;background:linear-gradient(160deg,#eef
       <div class="card-summary" id="medsSummary"></div>
     </div>
 
+    <!-- MORNING CHECK-IN CARD -->
+    <div class="card" id="checkinCard">
+      <div class="card-header">
+        <div class="card-left">
+          <div class="card-icon meds" style="background:#e3f2fd">&#9728;&#65039;</div>
+          <div>
+            <div class="card-title">Morning Check-in</div>
+            <div class="card-sub" id="checkinTime">Today</div>
+          </div>
+        </div>
+        <span class="badge" id="checkinBadge">--</span>
+      </div>
+      <div class="checkin-widget">
+        <div class="checkin-emoji" id="checkinEmoji">&#9203;</div>
+        <div>
+          <div class="checkin-label" id="checkinLabel">Waiting for check-in</div>
+          <div class="checkin-sub" id="checkinSub">No response recorded yet</div>
+        </div>
+      </div>
+    </div>
+
     <!-- SLEEP CARD -->
     <div class="card sleep-card" id="sleepCard">
       <div class="card-header">
@@ -394,6 +425,12 @@ body{min-height:100vh;padding-bottom:40px;background:linear-gradient(160deg,#eef
       </div>
       <div class="card-summary" id="sleepSummary"></div>
       <div class="stats" id="sleepStats"></div>
+      <!-- Sleep Night Report (historyczny — poprzednia noc) -->
+      <div id="sleepNightReport" class="hidden sleep-night-section">
+        <div class="sleep-night-hdr">&#127769; Last night&#39;s report</div>
+        <div class="stats" id="sleepNightStats"></div>
+        <div class="card-summary" id="sleepNightSummary" style="margin-top:6px;font-size:12px"></div>
+      </div>
     </div>
 
     <!-- ACTIVITY CARD -->
@@ -527,6 +564,8 @@ body{min-height:100vh;padding-bottom:40px;background:linear-gradient(160deg,#eef
     var cls='badge-offline',lbl=s||'--';
     if(s==='OK'||s==='NORMAL'){cls='badge-ok';lbl=s==='NORMAL'?'Normal':'OK';}
     else if(s==='PENDING'){cls='badge-pending';lbl='Pending';}
+    else if(s==='SKIPPED'){cls='badge-pending';lbl='Skipped';}
+    else if(s==='LATE'){cls='badge-pending';lbl='Late';}
     else if(s==='WARNING'){cls='badge-warning';lbl='Warning';}
     else if(['ALERT','ATTENTION','LOW','UNUSUAL','GOOD'].indexOf(s)>-1){
       if(s==='GOOD'){cls='badge-ok';lbl='Good';}
@@ -542,9 +581,12 @@ body{min-height:100vh;padding-bottom:40px;background:linear-gradient(160deg,#eef
   // ─── MED SLOT ─────────────────────────────────────────────────────────────
   function medSlot(label,status){
     var cls='pending',icon='&#9675;';
-    if(status==='taken'){cls='taken';icon='&#10003;';}
-    else if(status==='missed'||status==='skipped'){cls='missed';icon='&#10007;';}
-    return '<div class="med-slot"><div class="med-check '+cls+'">'+icon+'</div><span>'+esc(label)+'</span></div>';
+    if(status==='taken'){cls='taken';icon='&#10003;';}          // ✓ zielony
+    else if(status==='missed'){cls='missed';icon='&#10007;';}   // ✗ czerwony
+    else if(status==='skipped'){cls='skipped';icon='&#8709;';}  // ⊘ pomarańczowy
+    else if(status==='late'){cls='late';icon='&#9201;';}        // ⏰ żółty (spóźniona)
+    var lbl=status==='skipped'?' (skipped)':status==='late'?' (late)':'';
+    return '<div class="med-slot"><div class="med-check '+cls+'">'+icon+'</div><span>'+esc(label)+lbl+'</span></div>';
   }
 
   // ─── VITAL BOX ───────────────────────────────────────────────────────────
@@ -653,6 +695,23 @@ body{min-height:100vh;padding-bottom:40px;background:linear-gradient(160deg,#eef
     g('medsSummary').textContent=summary.meds||'No medication data available.';
     g('medsCard').className='card '+(st.meds&&st.meds.toUpperCase()==='ALERT'?'alert':'ok');
 
+    // Morning Check-in
+    var checkinStatus = (stats.checkinstatus || data.checkinstatus || 'pending').toLowerCase();
+    var CI_MAP = {
+      'well':        {emoji:'&#128522;',label:'Feeling well',        sub:'Check-in confirmed — all good',   badge:'OK',        cls:'ok'},
+      'ok':          {emoji:'&#128522;',label:'Feeling well',        sub:'Check-in confirmed — all good',   badge:'OK',        cls:'ok'},
+      'help':        {emoji:'&#128587;',label:'Needs attention',     sub:'Requested help this morning',     badge:'WARNING',   cls:'warn'},
+      'sos':         {emoji:'&#128682;',label:'SOS pressed',         sub:'Immediate check required!',       badge:'ALERT',     cls:'alert'},
+      'no_response': {emoji:'&#10067;', label:'No response',         sub:'Did not respond to check-in',     badge:'ATTENTION', cls:'warn'},
+      'pending':     {emoji:'&#9203;', label:'Waiting for check-in', sub:'Check-in scheduled for morning',  badge:'PENDING',   cls:''}
+    };
+    var ci = CI_MAP[checkinStatus] || CI_MAP['pending'];
+    if(g('checkinEmoji'))  g('checkinEmoji').innerHTML  = ci.emoji;
+    if(g('checkinLabel'))  g('checkinLabel').textContent = ci.label;
+    if(g('checkinSub'))    g('checkinSub').textContent   = ci.sub;
+    if(g('checkinBadge'))  renderBadge(g('checkinBadge'), ci.badge);
+    if(g('checkinCard'))   g('checkinCard').className    = 'card' + (ci.cls ? ' ' + ci.cls : '');
+
     // Sleep (historical from API)
     renderBadge(g('sleepBadge'), st.sleep||'NO_DATA');
     g('sleepSummary').textContent=summary.sleep||'No sleep data recorded yet.';
@@ -662,6 +721,34 @@ body{min-height:100vh;padding-bottom:40px;background:linear-gradient(160deg,#eef
     sleepStats.push('<div class="stat">&#9202; Duration: <span class="stat-val">'+fHours(sleep.totalinbedhours)+'</span></div>');
     sleepStats.push('<div class="stat">&#10024; Events: <span class="stat-val">'+(sleep.eventscount!=null?sleep.eventscount:0)+'</span></div>');
     g('sleepStats').innerHTML=sleepStats.join('');
+
+    // Sleep Night Report — dane z poprzedniej nocy (z n8n Store)
+    var sleepNight = safeObj(data.sleep_data || data.sleepdata || (sleep && sleep.night_data));
+    var nightDiv = g('sleepNightReport');
+    if(nightDiv){
+      var hasSleepNight = sleepNight && (sleepNight.sleep_score || sleepNight.sleep_duration_min);
+      if(hasSleepNight){
+        nightDiv.classList.remove('hidden');
+        var scoreMap = {good:'&#128994; Good', fair:'&#128993; Fair', poor:'&#128308; Poor'};
+        var durMin = sleepNight.sleep_duration_min || 0;
+        var nightStats = [
+          '<div class="stat">&#128308; Quality: <span class="stat-val">'+(scoreMap[sleepNight.sleep_score]||sleepNight.sleep_score||'--')+'</span></div>',
+          '<div class="stat">&#128716; Bed in: <span class="stat-val">'+fTime(sleepNight.bed_entry_time)+'</span></div>',
+          '<div class="stat">&#9728; Woke: <span class="stat-val">'+fTime(sleepNight.bed_exit_time)+'</span></div>',
+          '<div class="stat">&#9202; Duration: <span class="stat-val">'+(durMin?Math.floor(durMin/60)+'h '+(durMin%60)+'min':'--')+'</span></div>',
+          '<div class="stat">&#127769; Wakings: <span class="stat-val">'+(sleepNight.night_wakings!=null?sleepNight.night_wakings:'--')+'</span></div>',
+          '<div class="stat">&#129536; Breathing: <span class="stat-val">'+(sleepNight.avg_breathing_rate||'--')+'/min</span></div>',
+          '<div class="stat">&#128147; Heart: <span class="stat-val">'+(sleepNight.avg_heart_rate||'--')+' bpm</span></div>'
+        ];
+        g('sleepNightStats').innerHTML = nightStats.join('');
+        var nightAlerts = safeArr(sleepNight.alerts);
+        g('sleepNightSummary').textContent = nightAlerts.length
+          ? '&#9888; ' + nightAlerts.map(function(a){return a.message||a.type;}).join(' • ')
+          : 'Sleep within normal parameters.';
+      } else {
+        nightDiv.classList.add('hidden');
+      }
+    }
 
     // Activity
     renderBadge(g('activityBadge'), st.activity);
