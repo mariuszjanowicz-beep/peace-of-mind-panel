@@ -951,7 +951,9 @@ function renderData(data){
   var wDiverge=(wellStatus==='RED'&&(checkinStatus==='well'||checkinStatus==='ok'))||
                (wellStatus==='GREEN'&&(checkinStatus==='sos'||checkinStatus==='help'));
   g('wDivBadge').classList.toggle('hidden',!wDiverge);
-  g('wellnessTime').textContent='Today · '+new Date().toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});
+ var wTs = wellness && wellness.timestamp ? fTime(wellness.timestamp) : null;
+  g('wellnessTime').textContent = wTs ? 'Scored at ' + wTs : (isToday(currentDate) ? 'Today · calculating…' : fDisp(currentDate));
+
 
   // ── Medication Dual Card ──
   var medsM=stats.medsmorning||'pending';
