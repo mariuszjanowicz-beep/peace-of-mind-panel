@@ -670,8 +670,8 @@ button{cursor:pointer;background:none;border:none;font:inherit;color:inherit}
 })();
 
 // ─── CONFIG ────────────────────────────────────────────────────────────────
-var API        = 'https://n8n.srv1161536.hstgr.cloud/webhook/daily-summary';
-var LIVE_PROXY = 'https://n8n.srv1161536.hstgr.cloud/webhook/live-status';
+var API        = 'https://n8n.seniorslearnai.co.uk/webhook/daily-summary';
+var LIVE_PROXY = 'https://n8n.seniorslearnai.co.uk/webhook/live-status';
 
 // ─── STATE ─────────────────────────────────────────────────────────────────
 var currentDate      = new Date();
@@ -835,7 +835,7 @@ function renderTimeline(events,alerts){
     return'motion';
   }
   list.innerHTML=items.map(function(item){
-    return '<li class="tl-item'+(item.isAlert?' tl-alert':'')+'"><div class="tl-dot '+dotCls(item)+'"></div><div class="tl-time">'+fTime(item.time)+'</div><div class="tl-event">'+esc(item.event||item.type||'')+'</div></li>';
+    return '<li class="tl-item'+(item.isAlert?' tl-alert':'')+'" ><div class="tl-dot '+dotCls(item)+'"></div><div class="tl-time">'+fTime(item.time)+'</div><div class="tl-event">'+esc(item.event||item.type||'')+'</div></li>';
   }).join('');
   if(all.length>8){toggle.classList.remove('hidden');toggle.textContent=timelineExpanded?'Show less':'Show all ('+all.length+')';}
   else toggle.classList.add('hidden');
@@ -936,7 +936,6 @@ function renderData(data){
     setValClass('wObjVal',scoreValClass(wellScore));
     g('wObjSub').textContent=wellStatus==='GREEN'?'Great morning!':wellStatus==='AMBER'?'Some signals missing':'Low activity detected';
     setBar('wBar',wellScore,wc);
-    // Sensor dots from evidence
     var ev=safeArr(wellness.evidence||[]);
     setDot('d_bedroom', ev.some(function(e){return e&&e.toLowerCase().indexOf('bedroom')>=0;}));
     setDot('d_bathroom',ev.some(function(e){return e&&(e.toLowerCase().indexOf('bathroom')>=0||e.toLowerCase().indexOf('toilet')>=0);}));
@@ -947,13 +946,11 @@ function renderData(data){
     g('wObjVal').textContent='—'; g('wObjSub').textContent='Score not available yet'; setBar('wBar',0,'grn');
     ['d_bedroom','d_bathroom','d_kitchen','d_fridge','d_kettle'].forEach(function(id){setDot(id,false);});
   }
-  // Divergence: wellness RED or AMBER + check-in GOOD = diverge
   var wDiverge=(wellStatus==='RED'&&(checkinStatus==='well'||checkinStatus==='ok'))||
                (wellStatus==='GREEN'&&(checkinStatus==='sos'||checkinStatus==='help'));
   g('wDivBadge').classList.toggle('hidden',!wDiverge);
- var wTs = wellness && wellness.timestamp ? fTime(wellness.timestamp) : null;
+  var wTs = wellness && wellness.timestamp ? fTime(wellness.timestamp) : null;
   g('wellnessTime').textContent = wTs ? 'Scored at ' + wTs : (isToday(currentDate) ? 'Today · calculating…' : fDisp(currentDate));
-
 
   // ── Medication Dual Card ──
   var medsM=stats.medsmorning||'pending';
@@ -963,7 +960,6 @@ function renderData(data){
   g('medsSummary').textContent=summary.meds||'No medication data available.';
   g('medsCard').className='card'+(st.meds==='ALERT'?' alert':st.meds==='PENDING'?'':' ok');
 
-  // Med probability via cabinet sensor dot
   var cabinetActive=safeArr(data.activity&&data.activity.door_events?[]:timeline).some(function(e){
     return e&&(e.event||'').toLowerCase().indexOf('cabinet')>=0;
   });
@@ -978,8 +974,6 @@ function renderData(data){
   setDot('d_cabinet',cabinetActive);
   setDot('d_med_kitchen',stats.totalmotion>0);
   setDot('d_med_window',checkinStatus!=='pending'&&checkinStatus!=='no_response');
-  var mDiverge=(medsM==='missed'&&cabinetActive)||(medsM==='taken'&&!cabinetActive&&medProb<30);
-  g('wDivBadge'); // reuse pattern - meds diverge badge already in card
 
   // ── Check-in Card ──
   var CI_MAP={
@@ -1077,7 +1071,6 @@ async function updateLiveVitals(){
     var live=await r.json();
     if(!live)return;
 
-    // Rooms
     if(live.rooms){
       ['kitchen','hall','bedroom','living'].forEach(function(room){
         var state=live.rooms[room];
@@ -1088,7 +1081,6 @@ async function updateLiveVitals(){
     }
     if(live.activeRooms&&live.activeRooms.length)g('roomsBadge').textContent=live.activeRooms.length+' active';
 
-    // Vitals
     var brV=parseFloat(live.breathing),brReal=(!isNaN(brV)&&brV>0)?brV:null;
     var brS=brReal!==null?vRange(String(brReal),12,20,8,25):'';
     setVital('vboxBreathing','vBreathing','vBreathingBadge',
@@ -1109,7 +1101,6 @@ async function updateLiveVitals(){
     setVital('vboxLight','vLight','vLightBadge',isNaN(lxV)?null:lxV.toFixed(0),
       !isNaN(lxV)?lxV>50?'Light on':lxV>10?'Dim':'Dark':'--',lxS);
 
-    // Overall sleep badge from live data
     if(live.status){
       var sleepBadgeMap={normal:'badge-ok',warning:'badge-pending',alert:'badge-alert'};
       var sb=g('sleepBadge');
