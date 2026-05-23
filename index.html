@@ -464,12 +464,13 @@ button{cursor:pointer;background:none;border:none;font:inherit;color:inherit}
           <div class="card-ico meds">💊</div>
           <div>
             <div class="card-title">Medications</div>
-            <div class="card-sub" id="medsTime">Window: 08:00–10:30 · <span id="medTotalCount"></span></div>          </div>
+            <div class="card-sub" id="medsTime">Window: 08:00–10:30 &middot; <span id="medTotalCount"></span></div>
+          </div>
         </div>
         <span class="badge badge-offline" id="medsBadge">--</span>
       </div>
       <div class="meds-slots" id="medsSlots"></div>
-	  <div id="medFullList" style="margin-top:var(--sp3)"></div>
+        <div id="medFullList" style="margin-top:var(--sp3)"></div>
       <div class="divider"></div>
       <div class="ind-pair">
         <div class="ind">
@@ -672,7 +673,7 @@ button{cursor:pointer;background:none;border:none;font:inherit;color:inherit}
 // ─── CONFIG ────────────────────────────────────────────────────────────────
 var API        = 'https://n8n.seniorslearnai.co.uk/webhook/daily-summary';
 var LIVE_PROXY = 'https://n8n.seniorslearnai.co.uk/webhook/live-status';
-var MEDS_API = 'https://n8n.seniorslearnai.co.uk/webhook/medication-list';
+var MEDS_API   = 'https://n8n.seniorslearnai.co.uk/webhook/medication-list';
 var medsListCache = null;
 
 // ─── STATE ─────────────────────────────────────────────────────────────────
@@ -1143,20 +1144,14 @@ g('retryBtn').addEventListener('click',function(){ fetchData(true); });
 g('tlToggle').addEventListener('click',function(){ timelineExpanded=!timelineExpanded;if(currentData)renderTimeline(currentData.timeline,currentData.alerts); });
 
 // ─── AUTO REFRESH ──────────────────────────────────────────────────────────
-// ─── MEDICATION LIST FULL (patch v1) ───────────────────────
 
-var MEDS_API = 'https://n8n.seniorslearnai.co.uk/webhook/medication-list';
-var medsListCache = null;
-
+// ─── MEDICATION LIST ────────────────────────────────────────────────────────
 function renderMedGroupHtml(meds) {
   if (!meds || !meds.length) return '';
   return meds.map(function(m) {
-    return '<div class="med-slot">'
-      + '<div class="med-chk pending">⏰</div>'
-      + '<span><strong>' + esc(m.name) + '</strong>&nbsp;' + esc(m.dose)
-      + '&nbsp;<span style="color:var(--txm)">' + esc(m.time) + '</span>'
-      + (m.notes ? '&nbsp;<span style="color:var(--txf)">· ' + esc(m.notes) + '</span>' : '')
-      + '</span></div>';
+    var n = esc(m.name), d = esc(m.dose), t = esc(m.time);
+    var o = m.notes ? ' &middot; <span style="color:var(--txf)">' + esc(m.notes) + '</span>' : '';
+    return '<div class="med-slot"><div class="med-chk pending">&#9200;</div><span><strong>' + n + '</strong>&nbsp;' + d + '&nbsp;<span style="color:var(--txm)">' + t + '</span>' + o + '</span></div>';
   }).join('');
 }
 
@@ -1166,7 +1161,7 @@ async function fetchMedicationList() {
     if (!r.ok) return;
     medsListCache = await r.json();
     renderMedList();
-  } catch(e) { /* cicho ignoruj */ }
+  } catch(e) {}
 }
 
 function renderMedList() {
@@ -1175,26 +1170,29 @@ function renderMedList() {
   if (!el) return;
   var m = medsListCache;
   var html = '';
+  var hS = 'font-size:var(--text-xs);font-weight:700;color:var(--txf);text-transform:uppercase;letter-spacing:.08em;margin-bottom:var(--sp2)';
+  var sS = 'margin-bottom:var(--sp3)';
   if (m.morning && m.morning.length) {
-    html += '<div style="margin-bottom:var(--sp3)">'
-          + '<div style="font-size:var(--text-xs);font-weight:700;color:var(--txf);text-transform:uppercase;letter-spacing:.08em;margin-bottom:var(--sp2)">☀️ Morning</div>'
-          + renderMedGroupHtml(m.morning) + '</div>';
+    html += '<div style="' + sS + '"><div style="' + hS + '">Morning</div>' + renderMedGroupHtml(m.morning) + '</div>';
   }
   if (m.afternoon && m.afternoon.length) {
-    html += '<div style="margin-bottom:var(--sp3)">'
-          + '<div style="font-size:var(--text-xs);font-weight:700;color:var(--txf);text-transform:uppercase;letter-spacing:.08em;margin-bottom:var(--sp2)">🌤️ Afternoon</div>'
-          + renderMedGroupHtml(m.afternoon) + '</div>';
+    html += '<div style="' + sS + '"><div style="' + hS + '">Afternoon</div>' + renderMedGroupHtml(m.afternoon) + '</div>';
   }
   if (m.evening && m.evening.length) {
-    html += '<div style="margin-bottom:var(--sp3)">'
-          + '<div style="font-size:var(--text-xs);font-weight:700;color:var(--txf);text-transform:uppercase;letter-spacing:.08em;margin-bottom:var(--sp2)">🌙 Evening</div>'
-          + renderMedGroupHtml(m.evening) + '</div>';
+    html += '<div style="' + sS + '"><div style="' + hS + '">Evening</div>' + renderMedGroupHtml(m.evening) + '</div>';
+  }
+  if (!html) html = '<span style="color:var(--txm);font-size:var(--text-xs)">No active medications.</span>';
+  el.innerHTML = html;
+  var totalEl = gid('medTotalCount');
+  if (totalEl) totalEl.textContent = (m.total || 0) + ' active';
+}
+
 function startTimers(){
   if(refreshTimer)clearInterval(refreshTimer);
   if(liveTimer)clearInterval(liveTimer);
   refreshTimer=setInterval(function(){ if(isToday(currentDate))fetchData(false); },60000);
   liveTimer   =setInterval(function(){ if(isToday(currentDate))updateLiveVitals(); },30000);
-  setInterval(function() { fetchMedicationList(); }, 300000);
+  setInterval(function(){ fetchMedicationList(); }, 300000);
 }
 
 // ─── INIT ──────────────────────────────────────────────────────────────────
