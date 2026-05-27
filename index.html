@@ -323,6 +323,24 @@ button{cursor:pointer;background:none;border:none;font:inherit;color:inherit}
   .grid{gap:var(--sp3)}
   .vitals-grid{grid-template-columns:1fr 1fr}
 }
+
+/* ─── REMINDERS ─────────────────────────────────────────────────────────── */
+.rem-list{display:flex;flex-direction:column;gap:var(--sp2)}
+.rem-item{display:flex;align-items:flex-start;gap:var(--sp3);padding:var(--sp2) var(--sp3);background:var(--surf2);border:1px solid var(--border);border-radius:var(--r-lg);transition:all var(--ease)}
+.rem-item.rem-today{background:color-mix(in oklab,var(--ylw) 8%,var(--surf));border-color:color-mix(in oklab,var(--ylw) 30%,var(--border))}
+.rem-item.rem-tomorrow{background:color-mix(in oklab,var(--pri) 8%,var(--surf));border-color:color-mix(in oklab,var(--pri) 20%,var(--border))}
+.rem-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;margin-top:5px;background:var(--txf)}
+.rem-item.rem-today .rem-dot{background:var(--ylw)}
+.rem-item.rem-tomorrow .rem-dot{background:var(--pri)}
+.rem-text{font-size:var(--text-sm);font-weight:600;color:var(--tx);flex:1}
+.rem-meta{font-size:var(--text-xs);color:var(--txm);margin-top:2px}
+.rem-empty{text-align:center;padding:var(--sp6) var(--sp4);color:var(--txf);font-size:var(--text-xs)}
+.rem-id{font-size:var(--text-xs);color:var(--txf);flex-shrink:0;margin-top:3px}
+/* ─── EVENING WELLNESS ──────────────────────────────────────────────────── */
+.eve-row{display:grid;grid-template-columns:1fr 1fr;gap:var(--sp3);margin-top:var(--sp2)}
+.eve-mini{background:var(--surf2);border:1px solid var(--border);border-radius:var(--r-lg);padding:var(--sp3)}
+.eve-mini-lbl{font-size:var(--text-xs);color:var(--txf);font-weight:600;text-transform:uppercase;letter-spacing:.06em;margin-bottom:3px}
+.eve-mini-val{font-size:var(--text-sm);font-weight:700}
 </style>
 </head>
 <body>
@@ -518,6 +536,33 @@ button{cursor:pointer;background:none;border:none;font:inherit;color:inherit}
       </div>
     </div>
 
+
+    <!-- ══ EVENING CHECK-IN ══ -->
+    <div class="card" id="eveCard" style="display:none">
+      <div class="card-hdr">
+        <div class="card-l">
+          <div class="card-ico" style="background:color-mix(in oklab,var(--slp) 12%,var(--surf3))">🌙</div>
+          <div>
+            <div class="card-title">Evening Check-in</div>
+            <div class="card-sub" id="eveTime">Today</div>
+          </div>
+        </div>
+        <span class="badge badge-offline" id="eveBadge">--</span>
+      </div>
+      <div class="ci-widget">
+        <div class="ci-emoji" id="eveEmoji">🌙</div>
+        <div>
+          <div class="ci-label" id="eveLabel">Awaiting check-in</div>
+          <div class="ci-sub" id="eveSub">Scheduled for 21:00</div>
+        </div>
+      </div>
+      <div class="divider"></div>
+      <div class="eve-row">
+        <div class="eve-mini"><div class="eve-mini-lbl">Sensor Score</div><div class="eve-mini-val v-mut" id="eveSensorScore">--</div></div>
+        <div class="eve-mini"><div class="eve-mini-lbl">Final Score</div><div class="eve-mini-val v-mut" id="eveFinalScore">--</div></div>
+      </div>
+    </div>
+
     <!-- LIVE ROOMS CARD -->
     <div class="card" id="roomsCard">
       <div class="card-hdr">
@@ -640,6 +685,24 @@ button{cursor:pointer;background:none;border:none;font:inherit;color:inherit}
     <div class="card-summary" id="safetySummary"></div>
   </div>
 
+  <!-- ══ REMINDERS ══ -->
+  <p class="sec-lbl">Upcoming Reminders</p>
+  <div class="card" id="remindersCard" style="margin-bottom:var(--sp5)">
+    <div class="card-hdr">
+      <div class="card-l">
+        <div class="card-ico" style="background:color-mix(in oklab,var(--ylw) 12%,var(--surf3))">📅</div>
+        <div>
+          <div class="card-title">Reminders</div>
+          <div class="card-sub">Upcoming appointments &amp; notes</div>
+        </div>
+      </div>
+      <span class="badge badge-offline" id="remindersBadge">--</span>
+    </div>
+    <div class="rem-list" id="remindersList">
+      <div class="rem-empty">Loading reminders…</div>
+    </div>
+  </div>
+
   <!-- ══ TIMELINE ══ -->
   <p class="sec-lbl" id="tlTitle">Today's Timeline</p>
   <div class="card" style="margin-bottom:var(--sp8)">
@@ -671,10 +734,12 @@ button{cursor:pointer;background:none;border:none;font:inherit;color:inherit}
 })();
 
 // ─── CONFIG ────────────────────────────────────────────────────────────────
-var API        = 'https://n8n.seniorslearnai.co.uk/webhook/daily-summary';
-var LIVE_PROXY = 'https://n8n.seniorslearnai.co.uk/webhook/live-status';
-var MEDS_API   = 'https://n8n.seniorslearnai.co.uk/webhook/medication-list';
-var medsListCache = null;
+var API             = 'https://n8n.seniorslearnai.co.uk/webhook/daily-summary';
+var LIVE_PROXY      = 'https://n8n.seniorslearnai.co.uk/webhook/live-status';
+var MEDS_API        = 'https://n8n.seniorslearnai.co.uk/webhook/medication-list';
+var REMINDERS_API   = 'https://n8n.seniorslearnai.co.uk/webhook/reminders';
+var medsListCache   = null;
+var remindersCache  = null;
 
 // ─── STATE ─────────────────────────────────────────────────────────────────
 var currentDate      = new Date();
@@ -1187,12 +1252,103 @@ function renderMedList() {
   if (totalEl) totalEl.textContent = (m.total || 0) + ' active';
 }
 
+
+// ─── REMINDERS ─────────────────────────────────────────────────────────────
+async function fetchReminders() {
+  try {
+    var r = await fetch(REMINDERS_API, { signal: AbortSignal.timeout(8000) });
+    if (!r.ok) return;
+    remindersCache = await r.json();
+    renderReminders();
+  } catch(e) {}
+}
+
+function renderReminders() {
+  var el    = gid('remindersList');
+  var badge = gid('remindersBadge');
+  if (!el) return;
+  var items = (remindersCache && remindersCache.reminders) ? remindersCache.reminders : null;
+  if (!items) {
+    el.innerHTML = '<div class="rem-empty">No reminders set · use Telegram to add</div>';
+    if (badge) { badge.className='badge badge-nodata'; badge.textContent='None'; }
+    return;
+  }
+  if (!items.length) {
+    el.innerHTML = '<div class="rem-empty">No upcoming reminders</div>';
+    if (badge) { badge.className='badge badge-nodata'; badge.textContent='None'; }
+    return;
+  }
+  var today    = fDate(new Date());
+  var tomorrow = fDate(new Date(Date.now() + 86400000));
+  el.innerHTML = items.map(function(rem) {
+    var d      = rem.event_date ? String(rem.event_date).substring(0,10) : '';
+    var t      = rem.event_time ? String(rem.event_time).substring(0,5)  : '';
+    var isToday2 = (d === today);
+    var isTom    = (d === tomorrow);
+    var cls    = isToday2 ? ' rem-today' : isTom ? ' rem-tomorrow' : '';
+    var dispDate = isToday2 ? 'Today' : isTom ? 'Tomorrow'
+      : (d ? new Date(d+'T12:00:00').toLocaleDateString('en-GB',{weekday:'short',day:'numeric',month:'short'}) : '');
+    var meta = dispDate + (t ? ' at '+t : '');
+    return '<div class="rem-item'+cls+'">'
+      +'<div class="rem-dot"></div>'
+      +'<div style="flex:1"><div class="rem-text">'+esc(rem.message)+'</div>'
+      +'<div class="rem-meta">'+esc(meta)+'</div></div>'
+      +'<div class="rem-id">#'+esc(String(rem.id))+'</div></div>';
+  }).join('');
+  if (badge) {
+    var hasToday = items.some(function(r){ return r.event_date && String(r.event_date).substring(0,10)===today; });
+    badge.className  = 'badge '+(hasToday ? 'badge-warning' : 'badge-ok');
+    badge.textContent = items.length+(items.length===1?' reminder':' upcoming');
+  }
+}
+
+// ─── EVENING WELLNESS ──────────────────────────────────────────────────────
+function renderEveningWellness(data) {
+  var ew        = data && data.eveningwellness;
+  var eveCard   = gid('eveCard');
+  var todayView = isToday(currentDate);
+  var hasData   = ew && (ew.checkinstatus && ew.checkinstatus !== 'pending' || ew.finalscore != null);
+  if (!eveCard) return;
+  if (!todayView && !hasData) { eveCard.style.display='none'; return; }
+  eveCard.style.display = '';
+  var EVEMAP = {
+    'well':      { emoji:'✅', label:'Good day',          sub:'Confirmed via Telegram',   badge:'OK',        cls:'ok'    },
+    'so-so':     { emoji:'😐', label:'So-so day',         sub:'Confirmed via Telegram',   badge:'WARNING',   cls:'warn'  },
+    'difficult': { emoji:'😟', label:'Difficult day',     sub:'Confirmed via Telegram',   badge:'ATTENTION', cls:'warn'  },
+    'help':      { emoji:'🆘', label:'Needed help',       sub:'Caregiver alerted',         badge:'ALERT',     cls:'alert' },
+    'sos':       { emoji:'🆘', label:'SOS pressed',       sub:'Immediate check required', badge:'ALERT',     cls:'alert' },
+    'noresponse':{ emoji:'😶', label:'No response',       sub:'Did not respond at 21:00', badge:'ATTENTION', cls:'warn'  },
+    'pending':   { emoji:'🌙', label:'Awaiting check-in', sub:'Scheduled for 21:00',      badge:'PENDING',   cls:''      }
+  };
+  var status = (ew && ew.checkinstatus) ? String(ew.checkinstatus).toLowerCase() : 'pending';
+  var ci = EVEMAP[status] || EVEMAP['pending'];
+  var emoji = gid('eveEmoji');   if (emoji)  emoji.textContent = ci.emoji;
+  var lbl   = gid('eveLabel');   if (lbl)    lbl.textContent   = ci.label;
+  var sub   = gid('eveSub');     if (sub)    sub.textContent   = ci.sub;
+  var badge = gid('eveBadge');   if (badge)  renderBadge(badge, ci.badge);
+  eveCard.className = 'card'+(ci.cls?' '+ci.cls:'');
+  var eTime = gid('eveTime');    if (eTime)  eTime.textContent = todayView ? 'Today' : fDisp(currentDate);
+  var ss = gid('eveSensorScore');
+  if (ss) {
+    var sv = (ew && ew.sensorscore != null) ? ew.sensorscore : null;
+    ss.textContent = sv != null ? sv+' pts' : '--';
+    ss.className   = 'eve-mini-val '+(sv==null?'v-mut':sv>=50?'v-grn':sv>=25?'v-ylw':'v-org');
+  }
+  var fs = gid('eveFinalScore');
+  if (fs) {
+    var fv = (ew && ew.finalscore != null) ? ew.finalscore : null;
+    fs.textContent = fv != null ? fv+' pts' : '--';
+    fs.className   = 'eve-mini-val '+(fv==null?'v-mut':fv>=65?'v-grn':fv>=35?'v-ylw':'v-org');
+  }
+}
+
 function startTimers(){
   if(refreshTimer)clearInterval(refreshTimer);
   if(liveTimer)clearInterval(liveTimer);
   refreshTimer=setInterval(function(){ if(isToday(currentDate))fetchData(false); },60000);
   liveTimer   =setInterval(function(){ if(isToday(currentDate))updateLiveVitals(); },30000);
   setInterval(function(){ fetchMedicationList(); }, 300000);
+  setInterval(function(){ fetchReminders(); }, 300000);
 }
 
 // ─── INIT ──────────────────────────────────────────────────────────────────
@@ -1200,6 +1356,7 @@ updateDateDisplay();
 fetchData(true);
 startTimers();
 fetchMedicationList();
+fetchReminders();
 
 })();
 </script>
