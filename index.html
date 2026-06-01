@@ -315,6 +315,70 @@ button{cursor:pointer;background:none;border:none;font:inherit;color:inherit}
 .card:nth-child(5){animation-delay:.2s}
 .card:nth-child(6){animation-delay:.24s}
 
+
+/* ── LAST NIGHT WIDGET ── */
+.last-night{background:var(--surf);border:1px solid var(--border);border-top:2px solid var(--slp);
+  border-radius:var(--r-xl);padding:var(--sp4) var(--sp5);margin-bottom:var(--sp4);
+  box-shadow:var(--sh-sm);animation:fadeIn .3s ease both}
+.ln-hdr{display:flex;align-items:flex-start;justify-content:space-between;gap:var(--sp3);margin-bottom:var(--sp3)}
+.ln-l{display:flex;align-items:center;gap:var(--sp3);min-width:0;flex:1}
+.ln-ico{width:42px;height:42px;border-radius:var(--r-lg);background:var(--slp-hi);
+  display:flex;align-items:center;justify-content:center;font-size:1.4rem;flex-shrink:0}
+.ln-title{font-size:var(--text-sm);font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--txm)}
+.ln-date{font-size:var(--text-xs);color:var(--txf);margin-top:2px}
+.ln-score-box{text-align:right;flex-shrink:0}
+.ln-quality{font-size:var(--text-xs);font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--txm)}
+.ln-score{font-size:1.6rem;font-weight:800;line-height:1.1;margin-top:2px}
+.ln-score.q-restful{color:var(--grn)}
+.ln-score.q-ok{color:var(--ylw)}
+.ln-score.q-restless{color:var(--org)}
+.ln-score.q-poor{color:var(--red)}
+.ln-score.q-nodata{color:var(--txm)}
+.ln-score-max{font-size:var(--text-xs);color:var(--txf);font-weight:600;margin-left:2px}
+.ln-summary{font-size:var(--text-base);font-weight:600;color:var(--tx);margin:var(--sp2) 0 var(--sp3)}
+.ln-summary .ln-sep{color:var(--txf);margin:0 var(--sp2)}
+.ln-toggle{display:inline-flex;align-items:center;gap:var(--sp1);font-size:var(--text-xs);
+  font-weight:600;color:var(--slp);padding:6px var(--sp3);border-radius:var(--r-full);
+  background:var(--slp-hi);border:none;cursor:pointer;transition:all var(--ease)}
+.ln-toggle:hover{transform:translateY(-1px)}
+.ln-toggle .ln-caret{font-size:.7em;transition:transform var(--ease)}
+.ln-toggle.expanded .ln-caret{transform:rotate(180deg)}
+.ln-details{display:none;border-top:1px solid var(--border);padding-top:var(--sp3);margin-top:var(--sp3)}
+.ln-details.show{display:block;animation:fadeIn .25s ease}
+.ln-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--sp2);margin-bottom:var(--sp3)}
+.ln-tile{background:var(--surf2);border:1px solid var(--border);border-radius:var(--r-lg);
+  padding:var(--sp3);text-align:center}
+.ln-tile-lbl{font-size:var(--text-xs);color:var(--txf);font-weight:600;text-transform:uppercase;
+  letter-spacing:.06em;margin-bottom:4px}
+.ln-tile-val{font-size:var(--text-base);font-weight:700;color:var(--tx);line-height:1}
+.ln-tile-sub{font-size:var(--text-xs);color:var(--txm);margin-top:2px}
+.ln-trend{background:var(--surf2);border:1px solid var(--border);border-radius:var(--r-lg);
+  padding:var(--sp3) var(--sp4)}
+.ln-trend-lbl{font-size:var(--text-xs);color:var(--txf);font-weight:600;text-transform:uppercase;
+  letter-spacing:.06em;margin-bottom:var(--sp2)}
+.ln-spark{display:flex;align-items:flex-end;gap:6px;height:48px;margin-bottom:18px;position:relative}
+.ln-spark-bar{flex:1;min-width:8px;background:var(--slp-hi);border-radius:3px 3px 0 0;
+  position:relative;transition:height .5s ease;cursor:default}
+.ln-spark-bar.has-data{background:var(--slp)}
+.ln-spark-bar.q-restful{background:var(--grn)}
+.ln-spark-bar.q-ok{background:var(--ylw)}
+.ln-spark-bar.q-restless{background:var(--org)}
+.ln-spark-bar.q-poor{background:var(--red)}
+.ln-spark-bar:hover{opacity:.8}
+.ln-spark-day{position:absolute;bottom:-16px;left:0;right:0;text-align:center;
+  font-size:9px;color:var(--txf);font-weight:600}
+.ln-trend-stats{display:flex;gap:var(--sp4);font-size:var(--text-xs);color:var(--txm);
+  border-top:1px solid var(--border);padding-top:var(--sp2);margin-top:var(--sp3);flex-wrap:wrap}
+.ln-trend-stat{display:flex;align-items:center;gap:var(--sp1)}
+.ln-trend-stat .v{font-weight:700;color:var(--tx)}
+.ln-empty{text-align:center;padding:var(--sp5) var(--sp4);color:var(--txm);font-size:var(--text-xs)}
+.ln-empty-emoji{font-size:1.6rem;margin-bottom:var(--sp2);opacity:.5}
+@media(max-width:600px){
+  .ln-grid{grid-template-columns:repeat(2,1fr)}
+  .ln-hdr{flex-direction:column;align-items:stretch;gap:var(--sp2)}
+  .ln-score-box{text-align:left;display:flex;justify-content:space-between;align-items:center}
+}
+
 /* ── MOBILE ── */
 @media(max-width:600px){
   .main{padding:var(--sp3) var(--sp4)}
@@ -589,6 +653,15 @@ button{cursor:pointer;background:none;border:none;font:inherit;color:inherit}
     </div>
   </div>
 
+    <!-- ══ LAST NIGHT WIDGET ══ -->
+  <p class="sec-lbl">Last Night</p>
+  <div class="last-night" id="lastNightWidget">
+    <div class="ln-empty">
+      <div class="ln-empty-emoji">🌙</div>
+      <div>Loading last night's summary…</div>
+    </div>
+  </div>
+
   <!-- ══ SLEEP & VITALS ══ -->
   <p class="sec-lbl">Sleep &amp; Vitals</p>
   <div class="grid">
@@ -738,8 +811,12 @@ var API             = 'https://n8n.seniorslearnai.co.uk/webhook/daily-summary';
 var LIVE_PROXY      = 'https://n8n.seniorslearnai.co.uk/webhook/live-status';
 var MEDS_API        = 'https://n8n.seniorslearnai.co.uk/webhook/medication-list';
 var REMINDERS_API   = 'https://n8n.seniorslearnai.co.uk/webhook/reminders';
+var SLEEP_SUMMARY_API = 'https://n8n.seniorslearnai.co.uk/webhook/sleep-summary';
+var SLEEP_TREND_API   = 'https://n8n.seniorslearnai.co.uk/webhook/sleep-summary-7days';
 var medsListCache   = null;
 var remindersCache  = null;
+var sleepSummaryCache = null;
+var sleepTrendCache = null;
 
 // ─── STATE ─────────────────────────────────────────────────────────────────
 var currentDate      = new Date();
@@ -1231,7 +1308,7 @@ async function fetchMedicationList() {
 
 function renderMedList() {
   if (!medsListCache) return;
-  var el = gid('medFullList');
+  var el = g('medFullList');
   if (!el) return;
   var m = medsListCache;
   var html = '';
@@ -1248,7 +1325,7 @@ function renderMedList() {
   }
   if (!html) html = '<span style="color:var(--txm);font-size:var(--text-xs)">No active medications.</span>';
   el.innerHTML = html;
-  var totalEl = gid('medTotalCount');
+  var totalEl = g('medTotalCount');
   if (totalEl) totalEl.textContent = (m.total || 0) + ' active';
 }
 
@@ -1264,8 +1341,8 @@ async function fetchReminders() {
 }
 
 function renderReminders() {
-  var el    = gid('remindersList');
-  var badge = gid('remindersBadge');
+  var el    = g('remindersList');
+  var badge = g('remindersBadge');
   if (!el) return;
   var items = (remindersCache && remindersCache.reminders) ? remindersCache.reminders : null;
   if (!items) {
@@ -1305,7 +1382,7 @@ function renderReminders() {
 // ─── EVENING WELLNESS ──────────────────────────────────────────────────────
 function renderEveningWellness(data) {
   var ew        = data && data.eveningwellness;
-  var eveCard   = gid('eveCard');
+  var eveCard   = g('eveCard');
   var todayView = isToday(currentDate);
   var hasData   = ew && (ew.checkinstatus && ew.checkinstatus !== 'pending' || ew.finalscore != null);
   if (!eveCard) return;
@@ -1322,23 +1399,187 @@ function renderEveningWellness(data) {
   };
   var status = (ew && ew.checkinstatus) ? String(ew.checkinstatus).toLowerCase() : 'pending';
   var ci = EVEMAP[status] || EVEMAP['pending'];
-  var emoji = gid('eveEmoji');   if (emoji)  emoji.textContent = ci.emoji;
-  var lbl   = gid('eveLabel');   if (lbl)    lbl.textContent   = ci.label;
-  var sub   = gid('eveSub');     if (sub)    sub.textContent   = ci.sub;
-  var badge = gid('eveBadge');   if (badge)  renderBadge(badge, ci.badge);
+  var emoji = g('eveEmoji');   if (emoji)  emoji.textContent = ci.emoji;
+  var lbl   = g('eveLabel');   if (lbl)    lbl.textContent   = ci.label;
+  var sub   = g('eveSub');     if (sub)    sub.textContent   = ci.sub;
+  var badge = g('eveBadge');   if (badge)  renderBadge(badge, ci.badge);
   eveCard.className = 'card'+(ci.cls?' '+ci.cls:'');
-  var eTime = gid('eveTime');    if (eTime)  eTime.textContent = todayView ? 'Today' : fDisp(currentDate);
-  var ss = gid('eveSensorScore');
+  var eTime = g('eveTime');    if (eTime)  eTime.textContent = todayView ? 'Today' : fDisp(currentDate);
+  var ss = g('eveSensorScore');
   if (ss) {
     var sv = (ew && ew.sensorscore != null) ? ew.sensorscore : null;
     ss.textContent = sv != null ? sv+' pts' : '--';
     ss.className   = 'eve-mini-val '+(sv==null?'v-mut':sv>=50?'v-grn':sv>=25?'v-ylw':'v-org');
   }
-  var fs = gid('eveFinalScore');
+  var fs = g('eveFinalScore');
   if (fs) {
     var fv = (ew && ew.finalscore != null) ? ew.finalscore : null;
     fs.textContent = fv != null ? fv+' pts' : '--';
     fs.className   = 'eve-mini-val '+(fv==null?'v-mut':fv>=65?'v-grn':fv>=35?'v-ylw':'v-org');
+  }
+}
+
+
+// ─── LAST NIGHT WIDGET ─────────────────────────────────────────────────────
+async function fetchSleepSummary(){
+  try{
+    var r = await fetch(SLEEP_SUMMARY_API, { signal: AbortSignal.timeout(8000) });
+    if(!r.ok) return;
+    sleepSummaryCache = await r.json();
+    fetchSleepTrend();
+    renderLastNight();
+  }catch(e){}
+}
+
+async function fetchSleepTrend(){
+  try{
+    var r = await fetch(SLEEP_TREND_API, { signal: AbortSignal.timeout(8000) });
+    if(!r.ok) return;
+    sleepTrendCache = await r.json();
+    renderLastNight();
+  }catch(e){}
+}
+
+function qualityClass(q){
+  if(!q) return 'q-nodata';
+  q = String(q).toLowerCase();
+  if(q==='restful') return 'q-restful';
+  if(q==='ok') return 'q-ok';
+  if(q==='restless') return 'q-restless';
+  if(q==='poor') return 'q-poor';
+  return 'q-nodata';
+}
+
+function renderLastNight(){
+  var el = g('lastNightWidget');
+  if(!el) return;
+  var s = sleepSummaryCache;
+
+  if(!s || s.available === false){
+    el.innerHTML = '<div class="ln-empty"><div class="ln-empty-emoji">🌙</div>'+
+      '<div>'+esc((s && s.message) || 'First summary will be ready tomorrow at 07:30.')+'</div></div>';
+    return;
+  }
+
+  var qCls = qualityClass(s.sleep_quality);
+  var dateLabel = '';
+  try{
+    var d = new Date(s.summary_date + 'T12:00:00');
+    var dy = new Date(d); dy.setDate(d.getDate()+1);
+    dateLabel = d.toLocaleDateString('en-GB',{day:'numeric',month:'short'}) + ' → ' +
+                dy.toLocaleDateString('en-GB',{day:'numeric',month:'short'});
+  }catch(e){ dateLabel = s.summary_date || '--'; }
+
+  var quality = s.sleep_quality || 'No data';
+  var score = s.sleep_score != null ? s.sleep_score : '--';
+
+  var summary = '';
+  if(s.estimated_sleep && s.estimated_sleep !== '--'){
+    summary = 'Slept ' + esc(s.estimated_sleep);
+    if(s.wake_count != null){
+      summary += '<span class="ln-sep">·</span>Got up ' + s.wake_count +
+                 (s.wake_count === 1 ? ' time' : ' times');
+    }
+  } else {
+    summary = 'No sleep activity detected.';
+  }
+
+  var detailsTiles = '';
+  if(s.bedtime || s.wake_time){
+    detailsTiles =
+      '<div class="ln-grid">'+
+        '<div class="ln-tile"><div class="ln-tile-lbl">Bedtime</div>'+
+          '<div class="ln-tile-val">'+esc(s.bedtime||'--')+'</div></div>'+
+        '<div class="ln-tile"><div class="ln-tile-lbl">Woke up</div>'+
+          '<div class="ln-tile-val">'+esc(s.wake_time||'--')+'</div></div>'+
+        '<div class="ln-tile"><div class="ln-tile-lbl">Time in bed</div>'+
+          '<div class="ln-tile-val">'+esc(s.time_in_bed||'--')+'</div></div>'+
+        '<div class="ln-tile"><div class="ln-tile-lbl">Breathing</div>'+
+          '<div class="ln-tile-val">'+(s.avg_breathing_rate ? Number(s.avg_breathing_rate).toFixed(0) : '--')+'</div>'+
+          '<div class="ln-tile-sub">breaths/min</div></div>'+
+        '<div class="ln-tile"><div class="ln-tile-lbl">Heart</div>'+
+          '<div class="ln-tile-val">'+(s.avg_heart_rate ? Number(s.avg_heart_rate).toFixed(0) : '--')+'</div>'+
+          '<div class="ln-tile-sub">bpm</div></div>'+
+        '<div class="ln-tile"><div class="ln-tile-lbl">Signal quality</div>'+
+          '<div class="ln-tile-val">'+(100 - Math.round(s.signal_loss_pct||0))+'%</div>'+
+          '<div class="ln-tile-sub">'+(s.alert_count||0)+' alerts</div></div>'+
+      '</div>';
+  }
+
+  var trendBlock = '';
+  if(sleepTrendCache && sleepTrendCache.summaries && sleepTrendCache.summaries.length){
+    var bars = sleepTrendCache.summaries.map(function(item){
+      var pct = item.sleep_score > 0 ? Math.max(8, item.sleep_score) : 6;
+      var cls = qualityClass(item.sleep_quality);
+      var dateShort = '';
+      try{
+        dateShort = new Date(item.date+'T12:00:00').toLocaleDateString('en-GB',{weekday:'short'}).charAt(0);
+      }catch(e){}
+      var dataCls = item.sleep_score > 0 ? ' has-data' : '';
+      var title = (item.date||'') + ' · ' + (item.sleep_quality||'No data') +
+                  ' · ' + (item.sleep_score||0) + '/100';
+      return '<div class="ln-spark-bar '+cls+dataCls+'" style="height:'+pct+'%" title="'+esc(title)+'">'+
+             '<span class="ln-spark-day">'+esc(dateShort)+'</span></div>';
+    }).join('');
+
+    var statsRow = '';
+    if(sleepTrendCache.stats){
+      statsRow = '<div class="ln-trend-stats">'+
+        '<div class="ln-trend-stat">Avg score: <span class="v">'+esc(String(sleepTrendCache.stats.avg_sleep_score||'--'))+'</span></div>'+
+        '<div class="ln-trend-stat">Avg sleep: <span class="v">'+esc(sleepTrendCache.stats.avg_sleep_duration||'--')+'</span></div>'+
+        '<div class="ln-trend-stat">Total alerts: <span class="v">'+esc(String(sleepTrendCache.stats.total_alerts||0))+'</span></div>'+
+      '</div>';
+    }
+
+    var trendNote = sleepTrendCache.days_with_data < 7 ?
+      '<div style="font-size:var(--text-xs);color:var(--txf);margin-top:var(--sp1)">Trend will populate over the next week</div>' : '';
+
+    trendBlock =
+      '<div class="ln-trend">'+
+        '<div class="ln-trend-lbl">7-Day Trend</div>'+
+        '<div class="ln-spark">'+bars+'</div>'+
+        statsRow+
+        trendNote+
+      '</div>';
+  } else {
+    trendBlock = '<div class="ln-trend">'+
+      '<div class="ln-trend-lbl">7-Day Trend</div>'+
+      '<div style="font-size:var(--text-xs);color:var(--txm);padding:var(--sp2) 0">Trend will populate as more nights are recorded.</div>'+
+    '</div>';
+  }
+
+  el.innerHTML =
+    '<div class="ln-hdr">'+
+      '<div class="ln-l">'+
+        '<div class="ln-ico">🌙</div>'+
+        '<div>'+
+          '<div class="ln-title">Last Night</div>'+
+          '<div class="ln-date">'+esc(dateLabel)+'</div>'+
+        '</div>'+
+      '</div>'+
+      '<div class="ln-score-box">'+
+        '<div class="ln-quality">'+esc(quality)+'</div>'+
+        '<div class="ln-score '+qCls+'">'+score+'<span class="ln-score-max">/100</span></div>'+
+      '</div>'+
+    '</div>'+
+    '<div class="ln-summary">'+summary+'</div>'+
+    (detailsTiles || trendBlock ?
+      '<button class="ln-toggle" id="lnToggle">'+
+        '<span class="ln-caret">▼</span> View details'+
+      '</button>'+
+      '<div class="ln-details" id="lnDetails">'+
+        detailsTiles + trendBlock +
+      '</div>' : '');
+
+  var toggleBtn = g('lnToggle');
+  if(toggleBtn){
+    toggleBtn.addEventListener('click', function(){
+      var details = g('lnDetails');
+      var isOpen = details.classList.toggle('show');
+      toggleBtn.classList.toggle('expanded', isOpen);
+      toggleBtn.innerHTML = '<span class="ln-caret">▼</span> ' +
+                            (isOpen ? 'Show less' : 'View details');
+    });
   }
 }
 
@@ -1349,6 +1590,7 @@ function startTimers(){
   liveTimer   =setInterval(function(){ if(isToday(currentDate))updateLiveVitals(); },30000);
   setInterval(function(){ fetchMedicationList(); }, 300000);
   setInterval(function(){ fetchReminders(); }, 300000);
+  setInterval(function(){ fetchSleepSummary(); }, 300000);
 }
 
 // ─── INIT ──────────────────────────────────────────────────────────────────
@@ -1357,6 +1599,7 @@ fetchData(true);
 startTimers();
 fetchMedicationList();
 fetchReminders();
+fetchSleepSummary();
 
 })();
 </script>
