@@ -1226,19 +1226,36 @@ async function updateLiveVitals(){
     }
     if(live.activeRooms&&live.activeRooms.length)g('roomsBadge').textContent=live.activeRooms.length+' active';
 
-    var brV=parseFloat(live.breathing),brReal=(!isNaN(brV)&&brV>0)?brV:null;
+    // === CROSS-VALIDATION (P5 fix) ===
+    // Backend Live Status v6.1 zwraca is_stable. Jesli starsze v6 - fallback do JS check.
+    var brV=parseFloat(live.breathing);
+    var hrV=parseFloat(live.heartRate);
+    var targets=parseInt(live.targetCount,10);
+    var isStable=live.is_stable;
+    if(typeof isStable!=='boolean'){
+      // Fallback dla starszego v6 bez is_stable
+      isStable=(targets===1)&&(live.presence==='on')&&
+        !isNaN(brV)&&brV>=8&&brV<=25&&
+        !isNaN(hrV)&&hrV>=50&&hrV<=110;
+    }
+
+    var brReal=isStable?brV:null;
+    var hrReal=isStable?hrV:null;
+    var inBed=isStable;
+
+    // Breathing
     var brS=brReal!==null?vRange(String(brReal),12,20,8,25):'';
     setVital('vboxBreathing','vBreathing','vBreathingBadge',
       brReal!==null?brReal.toFixed(0):null,
       brS==='vok'?'Normal':brS==='vwarn'?'Monitor':brS==='valert'?'Check!':'--',brS);
 
-    var inBed=(live.presence==='on')&&(brReal!==null);
-    var hrV=parseFloat(live.heartRate),hrReal=inBed?hrV:null;
-    var hrS=(hrReal!==null&&!isNaN(hrReal))?vRange(String(hrReal),50,100,45,110):'';
+    // Heart
+    var hrS=hrReal!==null?vRange(String(hrReal),50,100,45,110):'';
     setVital('vboxHeart','vHeart','vHeartBadge',
-      (hrReal!==null&&!isNaN(hrReal))?hrReal.toFixed(0):null,
+      hrReal!==null?hrReal.toFixed(0):null,
       hrS==='vok'?'Normal':hrS==='vwarn'?'Monitor':hrS==='valert'?'Check!':'--',hrS);
 
+    // Presence
     setVital('vboxPresence','vPresence','vPresenceBadge',inBed?'Yes':'No',inBed?'In bed':'Away',inBed?'vok':'');
     g('sleepLive').classList.toggle('hidden',!inBed);
 
