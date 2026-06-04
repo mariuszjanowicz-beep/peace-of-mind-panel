@@ -208,6 +208,63 @@ button{cursor:pointer;background:none;border:none;font:inherit;color:inherit}
   background:var(--surf2);padding:3px var(--sp3);border-radius:var(--r-sm);border:1px solid var(--border)}
 .stat-val{font-weight:700;color:var(--tx)}
 
+
+/* ── MEDICATION V3 (3 sloty hybrid + next banner) ── */
+.next-med-banner{display:flex;align-items:center;gap:var(--sp3);padding:var(--sp3) var(--sp4);
+  background:linear-gradient(135deg,color-mix(in oklab,var(--slp) 18%,var(--surf)),var(--surf));
+  border:1px solid var(--border);border-radius:var(--r-lg);margin-bottom:var(--sp3)}
+.next-med-banner.active{background:linear-gradient(135deg,color-mix(in oklab,var(--ylw) 25%,var(--surf)),var(--surf));
+  border-color:var(--ylw)}
+.next-med-icon{font-size:1.6rem;line-height:1;flex-shrink:0}
+.next-med-body{flex:1;min-width:0}
+.next-med-title{font-size:var(--text-sm);font-weight:700}
+.next-med-sub{font-size:var(--text-xs);color:var(--txm);margin-top:2px}
+.next-med-countdown{font-size:var(--text-lg);font-weight:800;font-variant-numeric:tabular-nums;color:var(--slp);
+  flex-shrink:0;font-feature-settings:'tnum'}
+.next-med-banner.active .next-med-countdown{color:var(--ylw)}
+
+.meds-slots-v3{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--sp2);margin-bottom:var(--sp3)}
+.med-pill{display:flex;flex-direction:column;align-items:center;gap:4px;
+  padding:var(--sp3) var(--sp2);border-radius:var(--r-lg);
+  background:var(--surf2);border:1px solid var(--border);cursor:pointer;
+  transition:all var(--ease);user-select:none;position:relative}
+.med-pill:hover{transform:translateY(-1px);box-shadow:var(--sh-sm)}
+.med-pill.expanded{border-color:var(--pri)}
+.med-pill.is-active{border-color:var(--ylw);background:color-mix(in oklab,var(--ylw) 8%,var(--surf2));
+  box-shadow:0 0 0 2px color-mix(in oklab,var(--ylw) 30%,transparent)}
+.med-pill-slot{font-size:var(--text-xs);color:var(--txm);font-weight:600;text-transform:uppercase;letter-spacing:.04em}
+.med-pill-time{font-size:var(--text-sm);font-weight:700;font-variant-numeric:tabular-nums}
+.med-pill-status{font-size:1.4rem;line-height:1;margin:2px 0}
+.med-pill-confidence{font-size:var(--text-xs);font-weight:600;padding:1px 6px;border-radius:var(--r-full)}
+.med-pill-confidence.GREEN{background:var(--grn-hi);color:var(--grn)}
+.med-pill-confidence.AMBER{background:var(--ylw-hi);color:var(--ylw)}
+.med-pill-confidence.RED{background:var(--red-hi);color:var(--red)}
+.med-pill-confidence.PENDING{background:var(--org-hi);color:var(--org)}
+.med-pill-confidence.SCHEDULED{background:var(--surf3);color:var(--txm)}
+.med-pill-confidence.TAKEN{background:var(--grn);color:#fff}
+.med-pill-confidence.SKIPPED{background:var(--surf3);color:var(--txf)}
+
+.med-detail-expand{padding:var(--sp3);background:var(--surf2);border:1px solid var(--border);
+  border-radius:var(--r-lg);margin-top:var(--sp2)}
+.med-detail-name{font-size:var(--text-base);font-weight:700;margin-bottom:4px}
+.med-detail-meta{font-size:var(--text-xs);color:var(--txm);margin-bottom:var(--sp2)}
+.med-detail-score{display:flex;align-items:center;gap:var(--sp2);margin:var(--sp2) 0}
+.med-detail-score-label{font-size:var(--text-xs);color:var(--txm);font-weight:600}
+.med-detail-score-val{font-size:var(--text-sm);font-weight:700;font-variant-numeric:tabular-nums}
+.med-detail-bar{flex:1;height:6px;background:var(--surf3);border-radius:3px;overflow:hidden}
+.med-detail-bar-fill{height:100%;transition:width .8s cubic-bezier(.16,1,.3,1)}
+.med-detail-bar-fill.GREEN{background:var(--grn)}
+.med-detail-bar-fill.AMBER{background:var(--ylw)}
+.med-detail-bar-fill.RED{background:var(--red)}
+.med-detail-bar-fill.PENDING{background:var(--org)}
+.med-detail-bar-fill.SCHEDULED{background:var(--surf3)}
+.med-detail-signals{display:flex;flex-wrap:wrap;gap:4px;margin-top:var(--sp2)}
+.med-detail-signal{font-size:var(--text-xs);padding:2px 8px;border-radius:var(--r-full);
+  background:var(--surf3);color:var(--txf);border:1px solid var(--border)}
+.med-detail-signal.has{background:var(--grn-hi);color:var(--grn);border-color:transparent}
+.med-detail-evidence{font-size:var(--text-xs);color:var(--txm);margin-top:var(--sp2);line-height:1.5}
+.med-detail-evidence ul{margin:4px 0;padding-left:16px}
+
 /* ── MED SLOTS ── */
 .meds-slots{display:flex;gap:var(--sp3)}
 .med-slot{display:flex;align-items:center;gap:var(--sp2);font-size:var(--text-xs);color:var(--txm)}
@@ -539,39 +596,35 @@ button{cursor:pointer;background:none;border:none;font:inherit;color:inherit}
       </div>
     </div>
 
-    <!-- MEDICATION DUAL CARD -->
+    <!-- MEDICATION CARD V3 (3 hybrid slots + next banner) -->
     <div class="card" id="medsCard">
       <div class="card-hdr">
         <div class="card-l">
           <div class="card-ico meds">💊</div>
           <div>
             <div class="card-title">Medications</div>
-            <div class="card-sub" id="medsTime">Window: 08:00–10:30 &middot; <span id="medTotalCount"></span></div>
+            <div class="card-sub" id="medsTime">3 daily slots</div>
           </div>
         </div>
         <span class="badge badge-offline" id="medsBadge">--</span>
       </div>
-      <div class="meds-slots" id="medsSlots"></div>
-        <div id="medFullList" style="margin-top:var(--sp3)"></div>
-      <div class="divider"></div>
-      <div class="ind-pair">
-        <div class="ind">
-          <div class="ind-lbl">👤 Confirmed</div>
-          <div class="ind-val v-mut" id="mSubVal">—</div>
-          <div class="ind-sub" id="mSubSub">No confirmation yet</div>
+
+      <!-- Next medication banner with countdown -->
+      <div class="next-med-banner" id="nextMedBanner" style="display:none">
+        <div class="next-med-icon" id="nextMedIcon">⏭️</div>
+        <div class="next-med-body">
+          <div class="next-med-title" id="nextMedTitle">Next medication</div>
+          <div class="next-med-sub" id="nextMedSub">—</div>
         </div>
-        <div class="ind">
-          <div class="ind-lbl">📡 Probability</div>
-          <div class="ind-val v-mut" id="mObjVal">—</div>
-          <div class="ind-sub" id="mObjSub">Cabinet sensor</div>
-          <div class="bar-wrap"><div class="bar-trk"><div class="bar-fill grn" id="mBar" style="width:0%"></div></div></div>
-        </div>
+        <div class="next-med-countdown" id="nextMedCountdown">—</div>
       </div>
-      <div class="s-dots">
-        <div class="s-dot" id="d_cabinet"><span class="pip"></span>🗄️ Cabinet opened</div>
-        <div class="s-dot" id="d_med_kitchen"><span class="pip"></span>🍳 Kitchen motion</div>
-        <div class="s-dot" id="d_med_window"><span class="pip"></span>⏰ Right time window</div>
-      </div>
+
+      <!-- 3 compact pills -->
+      <div class="meds-slots-v3" id="medsSlotsV3"></div>
+
+      <!-- Expanded detail (1 visible at a time) -->
+      <div class="med-detail-expand" id="medDetailExpand" style="display:none"></div>
+
       <div class="card-summary" id="medsSummary"></div>
     </div>
 
@@ -810,10 +863,14 @@ button{cursor:pointer;background:none;border:none;font:inherit;color:inherit}
 var API             = 'https://n8n.seniorslearnai.co.uk/webhook/daily-summary';
 var LIVE_PROXY      = 'https://n8n.seniorslearnai.co.uk/webhook/live-status';
 var MEDS_API        = 'https://n8n.seniorslearnai.co.uk/webhook/medication-list';
+var MEDS_STATUS_API = 'https://n8n.seniorslearnai.co.uk/webhook/medication-status';
 var REMINDERS_API   = 'https://n8n.seniorslearnai.co.uk/webhook/reminders';
 var SLEEP_SUMMARY_API = 'https://n8n.seniorslearnai.co.uk/webhook/sleep-summary';
 var SLEEP_TREND_API   = 'https://n8n.seniorslearnai.co.uk/webhook/sleep-summary-7days';
 var medsListCache   = null;
+var medsStatusCache = null;
+var selectedMedSlot = null; // 'morning'/'afternoon'/'evening' lub null
+var nextMedTimer    = null; // setInterval ID dla countdown
 var remindersCache  = null;
 var sleepSummaryCache = null;
 var sleepTrendCache = null;
@@ -1097,28 +1154,13 @@ function renderData(data){
   var wTs = wellness && wellness.timestamp ? fTime(wellness.timestamp) : null;
   g('wellnessTime').textContent = wTs ? 'Scored at ' + wTs : (isToday(currentDate) ? 'Today · calculating…' : fDisp(currentDate));
 
-  // ── Medication Dual Card ──
-  var medsM=stats.medsmorning||'pending';
-  var medsE=stats.medsevening||'pending';
+  // ── Medication Card V3 — renderowanie odbywa sie w renderMedicationV3() ──
+  // wywolywane przez fetchMedicationStatus() co 30s niezaleznie od daily summary
+  // Tu tylko aktualizujemy badge na podstawie globalnego stanu
   renderBadge(g('medsBadge'),st.meds);
-  g('medsSlots').innerHTML=medSlot('Morning',medsM)+medSlot('Evening',medsE);
-  g('medsSummary').textContent=summary.meds||'No medication data available.';
   g('medsCard').className='card'+(st.meds==='ALERT'?' alert':st.meds==='PENDING'?'':' ok');
+  g('medsSummary').textContent=summary.meds||'';
 
-  var cabinetActive=safeArr(data.activity&&data.activity.door_events?[]:timeline).some(function(e){
-    return e&&(e.event||'').toLowerCase().indexOf('cabinet')>=0;
-  });
-  var medProb=medsM==='taken'?100:medsM==='missed'?0:cabinetActive?70:30;
-  g('mSubVal').textContent=medsM==='taken'?'✅ Taken':medsM==='missed'?'✗ Missed':medsM==='skipped'?'⊘ Skipped':'— '+medsM.charAt(0).toUpperCase()+medsM.slice(1);
-  setValClass('mSubVal',medsM==='taken'?'v-grn':medsM==='missed'?'v-red':medsM==='skipped'?'v-org':'v-mut');
-  g('mSubSub').textContent=medsM==='taken'?'Confirmed via Telegram':medsM==='missed'?'No confirmation received':medsM==='pending'?'Awaiting confirmation':'Status: '+medsM;
-  g('mObjVal').textContent=medProb+'%';
-  setValClass('mObjVal',scoreValClass(medProb));
-  g('mObjSub').textContent=medProb>=85?'HIGH confidence':medProb>=55?'MEDIUM confidence':medProb>=30?'LOW confidence':'VERY LOW confidence';
-  setBar('mBar',medProb,scoreColorClass(medProb));
-  setDot('d_cabinet',cabinetActive);
-  setDot('d_med_kitchen',stats.totalmotion>0);
-  setDot('d_med_window',checkinStatus!=='pending'&&checkinStatus!=='no_response');
 
   // ── Check-in Card ──
   var CI_MAP={
@@ -1305,6 +1347,161 @@ g('tlToggle').addEventListener('click',function(){ timelineExpanded=!timelineExp
 // ─── AUTO REFRESH ──────────────────────────────────────────────────────────
 
 // ─── MEDICATION LIST ────────────────────────────────────────────────────────
+
+// ─── MEDICATION V3 (Status API + 3-slot rendering + countdown) ───
+async function fetchMedicationStatus(){
+  try{
+    var r = await fetch(MEDS_STATUS_API, { signal: AbortSignal.timeout(8000) });
+    if(!r.ok){ console.warn('MEDS_STATUS_API HTTP', r.status); return; }
+    medsStatusCache = await r.json();
+    renderMedicationV3();
+  } catch(e){ console.warn('fetchMedicationStatus failed:', e.message); }
+}
+
+function statusToBadge(status, confidence){
+  // Returns {emoji, label, class}
+  var MAP = {
+    'taken':              {emoji:'✋', label:'TAKEN',    cls:'TAKEN'},
+    'probably_taken':     {emoji:'🟢', label:'GREEN',    cls:'GREEN'},
+    'uncertain':          {emoji:'🟡', label:'AMBER',    cls:'AMBER'},
+    'missed':             {emoji:'🔴', label:'MISSED',   cls:'RED'},
+    'missed_no_reminder': {emoji:'🔴', label:'MISSED',   cls:'RED'},
+    'pending':            {emoji:'⏳', label:'PENDING',  cls:'PENDING'},
+    'skipped':            {emoji:'⊘',  label:'SKIPPED',  cls:'SKIPPED'},
+    'scheduled':          {emoji:'⚪', label:'SCHEDULED',cls:'SCHEDULED'}
+  };
+  return MAP[status] || {emoji:'?', label:(status||'').toUpperCase()||'--', cls:'SCHEDULED'};
+}
+
+function renderNextMedBanner(){
+  var d = medsStatusCache;
+  if(!d){ g('nextMedBanner').style.display='none'; return; }
+  
+  // Priorytet: active > next (future)
+  var banner = g('nextMedBanner');
+  if(d.active){
+    banner.classList.add('active');
+    banner.style.display='flex';
+    g('nextMedIcon').textContent = '⏰';
+    g('nextMedTitle').textContent = 'NOW: ' + (d.active.slot.charAt(0).toUpperCase()+d.active.slot.slice(1));
+    g('nextMedSub').textContent = (d.active.medication_name||'—') + ' · ' + d.active.scheduled_hhmm;
+    g('nextMedCountdown').textContent = '⏱ active';
+  } else if(d.next){
+    banner.classList.remove('active');
+    banner.style.display='flex';
+    g('nextMedIcon').textContent = '⏭️';
+    g('nextMedTitle').textContent = 'Next: ' + d.next.slot.charAt(0).toUpperCase()+d.next.slot.slice(1);
+    g('nextMedSub').textContent = (d.next.medication_name||'—') + ' · ' + d.next.scheduled_hhmm;
+    var mins = d.next.minutes_to;
+    if(mins!=null){
+      if(mins>=60){
+        var h = Math.floor(mins/60), m = mins%60;
+        g('nextMedCountdown').textContent = h+'h '+m+'min';
+      } else {
+        g('nextMedCountdown').textContent = mins+' min';
+      }
+    } else g('nextMedCountdown').textContent='—';
+  } else {
+    banner.classList.remove('active');
+    banner.style.display='none';
+  }
+}
+
+function renderMedicationV3(){
+  var d = medsStatusCache;
+  if(!d){ return; }
+  
+  renderNextMedBanner();
+  
+  // 3 pills
+  var html = '';
+  (d.slots||[]).forEach(function(s){
+    var badge = statusToBadge(s.status, s.confidence);
+    var activeCls = s.is_active ? ' is-active' : '';
+    var expandedCls = (selectedMedSlot===s.slot) ? ' expanded' : '';
+    html += '<div class="med-pill'+activeCls+expandedCls+'" data-slot="'+s.slot+'" onclick="toggleMedDetail(\''+s.slot+'\')">';
+    html += '<div class="med-pill-slot">'+s.slot+'</div>';
+    html += '<div class="med-pill-time">'+s.scheduled_hhmm+'</div>';
+    html += '<div class="med-pill-status">'+badge.emoji+'</div>';
+    html += '<div class="med-pill-confidence '+badge.cls+'">'+badge.label+'</div>';
+    html += '</div>';
+  });
+  g('medsSlotsV3').innerHTML = html || '<span style="color:var(--txm)">No medications configured.</span>';
+  
+  renderMedDetail();
+}
+
+function toggleMedDetail(slot){
+  selectedMedSlot = (selectedMedSlot===slot) ? null : slot;
+  renderMedicationV3();
+}
+
+function renderMedDetail(){
+  var d = medsStatusCache;
+  var box = g('medDetailExpand');
+  if(!d || !selectedMedSlot){ box.style.display='none'; return; }
+  
+  var slot = (d.slots||[]).find(function(s){return s.slot===selectedMedSlot;});
+  if(!slot){ box.style.display='none'; return; }
+  
+  var badge = statusToBadge(slot.status, slot.confidence);
+  var score = slot.signal_score!=null ? slot.signal_score : 0;
+  var scoreMax = slot.signal_max || 6;
+  var scorePct = Math.min(100, Math.round((score/scoreMax)*100));
+  
+  var sig = slot.signals || {};
+  var sigDots = [
+    {key:'cabinet',  label:'🗄 Cabinet',  has: (sig.cabinet||0)>0,       weight:2},
+    {key:'kitchen',  label:'🚶 Kitchen',  has: (sig.kitchen||0)>0,       weight:1},
+    {key:'kf',       label:'☕ Kettle/Fridge', has: (sig.kettle_fridge||0)>0, weight:1},
+    {key:'pad',      label:'📡 Pad',      has: (sig.presence||0)>0,      weight:2}
+  ];
+  
+  var html = '';
+  html += '<div class="med-detail-name">'+(slot.medication_name||'—')+' <span style="font-weight:400;color:var(--txm)">· '+(slot.dose||'')+'</span></div>';
+  html += '<div class="med-detail-meta">'+slot.slot.charAt(0).toUpperCase()+slot.slot.slice(1)+' · scheduled '+slot.scheduled_hhmm;
+  if(slot.evaluated_at) html += ' · evaluated '+fTime(slot.evaluated_at);
+  html += '</div>';
+  
+  html += '<div class="med-detail-score">';
+  html += '<span class="med-detail-score-label">Signals</span>';
+  html += '<div class="med-detail-bar"><div class="med-detail-bar-fill '+badge.cls+'" style="width:'+scorePct+'%"></div></div>';
+  html += '<span class="med-detail-score-val">'+score+'/'+scoreMax+'</span>';
+  html += '</div>';
+  
+  html += '<div class="med-detail-signals">';
+  sigDots.forEach(function(sd){
+    html += '<span class="med-detail-signal'+(sd.has?' has':'')+'">'+(sd.has?'✓ ':'– ')+sd.label+'</span>';
+  });
+  html += '</div>';
+  
+  if(slot.evidence && slot.evidence.length){
+    html += '<div class="med-detail-evidence"><strong>Evidence:</strong><ul>';
+    slot.evidence.forEach(function(e){ html += '<li>'+e+'</li>'; });
+    html += '</ul></div>';
+  } else if(slot.status==='scheduled') {
+    html += '<div class="med-detail-evidence">Scheduled — no signals yet.</div>';
+  } else if(slot.status==='pending') {
+    html += '<div class="med-detail-evidence">In window — collecting signals…</div>';
+  }
+  
+  box.innerHTML = html;
+  box.style.display='block';
+}
+
+// Tick countdown co 60s (update minutes)
+function tickMedCountdown(){
+  if(medsStatusCache && (medsStatusCache.active || medsStatusCache.next)){
+    // Recompute minutes_to locally bez request
+    var d = medsStatusCache;
+    if(d.next){
+      d.next.minutes_to = Math.max(0, (d.next.minutes_to||0) - 1);
+    }
+    renderNextMedBanner();
+  }
+}
+
+
 function renderMedGroupHtml(meds) {
   if (!meds || !meds.length) return '';
   return meds.map(function(m) {
@@ -1606,6 +1803,8 @@ function startTimers(){
   refreshTimer=setInterval(function(){ if(isToday(currentDate))fetchData(false); },60000);
   liveTimer   =setInterval(function(){ if(isToday(currentDate))updateLiveVitals(); },30000);
   setInterval(function(){ fetchMedicationList(); }, 300000);
+  setInterval(function(){ fetchMedicationStatus(); }, 30000);  // 30s cache
+  nextMedTimer = setInterval(tickMedCountdown, 60000);          // countdown tick
   setInterval(function(){ fetchReminders(); }, 300000);
   setInterval(function(){ fetchSleepSummary(); }, 300000);
 }
@@ -1615,6 +1814,7 @@ updateDateDisplay();
 fetchData(true);
 startTimers();
 fetchMedicationList();
+fetchMedicationStatus();
 fetchReminders();
 fetchSleepSummary();
 
