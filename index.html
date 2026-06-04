@@ -1435,6 +1435,7 @@ function toggleMedDetail(slot){
   selectedMedSlot = (selectedMedSlot===slot) ? null : slot;
   renderMedicationV3();
 }
+window.toggleMedDetail = toggleMedDetail;  // expose dla onclick="..." w innerHTML
 
 function renderMedDetail(){
   var d = medsStatusCache;
