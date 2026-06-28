@@ -1254,12 +1254,34 @@ async function updateLiveVitals(){
     if(!live)return;
 
     if(live.rooms){
+      // Persistent last-motion-per-room w localStorage
+      var lastMotionKey='rooms_last_motion_'+(currentDate||new Date().toISOString().slice(0,10));
+      var lastMotion={};
+      try{lastMotion=JSON.parse(localStorage.getItem(lastMotionKey)||'{}');}catch(e){}
+      var nowIso=new Date().toISOString();
       ['kitchen','hall','bedroom','living'].forEach(function(room){
         var state=live.rooms[room];
         var el=g('room-'+room),rt=g('rt-'+room);
-        if(state==='on'){el.className='room active';rt.textContent='Active';}
-        else if(state==='off'){el.className='room inactive';rt.textContent='No motion';}
+        if(state==='on'){
+          el.className='room active';
+          rt.textContent='Active now';
+          lastMotion[room]=nowIso; // zapisz ostatnia detekcje
+        } else if(state==='off'){
+          el.className='room inactive';
+          var lm=lastMotion[room];
+          if(lm){
+            var mins=Math.round((Date.now()-new Date(lm))/60000);
+            rt.textContent=mins<2?'Just now':mins<60?'Last: '+mins+'m ago':'Last: '+fTime(lm);
+          } else {
+            rt.textContent='No motion yet';
+          }
+        } else {
+          // null/unknown - czujnik moze byc offline
+          el.className='room inactive';
+          rt.textContent='Sensor offline';
+        }
       });
+      try{localStorage.setItem(lastMotionKey,JSON.stringify(lastMotion));}catch(e){}
     }
     if(live.activeRooms&&live.activeRooms.length)g('roomsBadge').textContent=live.activeRooms.length+' active';
 
