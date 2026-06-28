@@ -1255,7 +1255,11 @@ async function updateLiveVitals(){
 
     if(live.rooms){
       // Persistent last-motion-per-room w localStorage
-      var lastMotionKey='rooms_last_motion_'+(currentDate||new Date().toISOString().slice(0,10));
+      // FIX: currentDate to Date object, musimy konwertowac na YYYY-MM-DD string
+      var todayStr;
+      try{ todayStr = (currentDate instanceof Date ? currentDate : new Date()).toISOString().slice(0,10); }
+      catch(e){ todayStr = new Date().toISOString().slice(0,10); }
+      var lastMotionKey='rooms_last_motion_'+todayStr;
       var lastMotion={};
       try{lastMotion=JSON.parse(localStorage.getItem(lastMotionKey)||'{}');}catch(e){}
       var nowIso=new Date().toISOString();
