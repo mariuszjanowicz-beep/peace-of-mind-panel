@@ -1294,7 +1294,8 @@ async function updateLiveVitals(){
 
     // Presence
     setVital('vboxPresence','vPresence','vPresenceBadge',inBed?'Yes':'No',inBed?'In bed':'Away',inBed?'vok':'');
-    g('sleepLive').classList.toggle('hidden',!inBed);
+    // P3a: sleepLive element usuniety - zostawiamy guard zeby nie wybuchalo na null
+    var sleepLiveEl = g('sleepLive'); if (sleepLiveEl) sleepLiveEl.classList.toggle('hidden',!inBed);
 
     var lxV=parseFloat(live.light),lxS=!isNaN(lxV)?lxV>50?'valert':lxV>10?'vwarn':'vok':'';
     setVital('vboxLight','vLight','vLightBadge',isNaN(lxV)?null:lxV.toFixed(0),
