@@ -729,10 +729,6 @@ button{cursor:pointer;background:none;border:none;font:inherit;color:inherit}
         </div>
         <span class="badge badge-sleep" id="sleepBadge">Sleep</span>
       </div>
-      <div class="live-row hidden" id="sleepLive">
-        <div class="live-dot"></div>
-        <span>Live monitoring active — In bed now</span>
-      </div>
       <div class="vitals-grid" id="sleepVitals">
         <div class="vital" id="vboxBreathing">
           <div class="vital-lbl">Breathing</div>
@@ -1060,7 +1056,7 @@ function updateRoomsFromTimeline(timeline){
       var mins=Math.round((now-new Date(ts))/60000);
       var active=mins<30;
       el.className='room '+(active?'active':'inactive');
-      rt.textContent=mins<2?'Just now':mins<60?mins+' min ago':fTime(ts);
+      rt.textContent=mins<2?'Just now':mins<60?'Last: '+mins+'m ago':'Last: '+fTime(ts);
     } else {
       el.className='room inactive';rt.textContent='No data';
     }
@@ -1197,8 +1193,7 @@ function renderData(data){
   g('sleepCard').className='card sleep-card';
   var sleepStats=[];
   sleepStats.push('<div class="stat">🛏️ In bed: <span class="stat-val">'+(sleep.inbed===true?'Yes':sleep.inbed===false?'No':'--')+'</span></div>');
-  sleepStats.push('<div class="stat">⏱️ Duration: <span class="stat-val">'+fHours(sleep.totalinbedhours)+'</span></div>');
-  sleepStats.push('<div class="stat">✨ Events: <span class="stat-val">'+(sleep.eventscount!=null?sleep.eventscount:0)+'</span></div>');
+  sleepStats.push('<div class="stat" title="Bedroom motion events overnight">✨ Night motion: <span class="stat-val">'+(stats.nightmotion!=null?stats.nightmotion:0)+'</span></div>');
   g('sleepStats').innerHTML=sleepStats.join('');
 
   // Sleep Night Report
